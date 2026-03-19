@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BFC — Blockchain For Consumer | Galaxy Holdings · Sovico Group</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root {
+  --navy:       #09172B;
+  --navy-mid:   #0D2244;
+  --navy-light: #163055;
+  --blue:       #1565C0;
+  --blue-light: #2196F3;
+  --cyan:       #00B4D8;
+  --cyan-dim:   rgba(0,180,216,0.12);
+  --teal:       #0096C7;
+  --gold:       #F59E0B;
+  --gold-light: #FCD34D;
+  --green:      #10B981;
+  --red:        #EF4444;
+  --bg:         #F4F6FB;
+  --white:      #FFFFFF;
+  --text:       #111827;
+  --text-mid:   #374151;
+  --text-light: #6B7280;
+  --border:     rgba(0,0,0,0.07);
+  --shadow-sm:  0 2px 12px rgba(9,23,43,0.07);
+  --shadow-md:  0 6px 28px rgba(9,23,43,0.11);
+  --shadow-lg:  0 16px 56px rgba(9,23,43,0.16);
+  --font-vi:    'Be Vietnam Pro', system-ui, sans-serif;
+  --font-head:  'Rajdhani', 'Be Vietnam Pro', sans-serif;
+  --r:          12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:15px}
+body{font-family:var(--font-vi);background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.65}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:999;
+  background:rgba(9,23,43,0.97);backdrop-filter:blur(14px);
+  height:54px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;border-bottom:1px solid rgba(0,180,216,0.18);
+}
+.nav-logo{font-family:var(--font-head);font-size:17px;font-weight:700;color:#fff;letter-spacing:2px}
+.nav-logo span{color:var(--cyan)}
+.nav-links{display:flex;gap:2px}
+.nav-links a{
+  color:rgba(255,255,255,0.55);text-decoration:none;
+  font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;
+  padding:5px 10px;border-radius:5px;transition:all .2s;font-family:var(--font-vi)
+}
+.nav-links a:hover{color:var(--cyan);background:rgba(0,180,216,0.1)}
+.nav-badge{font-size:10px;color:rgba(255,255,255,0.3);font-family:var(--font-vi);letter-spacing:.5px}
+
+/* ── SLIDES ── */
+.slide{
+  padding:90px 64px 64px;
+  min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.slide+.slide{border-top:1px solid rgba(9,23,43,0.06)}
+
+/* ── COVER ── */
+#cover{
+  background:var(--navy);
+  padding:0;min-height:100vh;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.cover-inner{padding:80px 64px;position:relative;z-index:2;max-width:960px}
+.grid-bg{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(0,180,216,0.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,180,216,0.06) 1px,transparent 1px);
+  background-size:56px 56px;
+  animation:gridScroll 25s linear infinite;
+}
+@keyframes gridScroll{0%{transform:translateY(0)}100%{transform:translateY(56px)}}
+.glow1{position:absolute;width:640px;height:640px;right:-180px;top:-180px;
+  background:radial-gradient(circle,rgba(0,180,216,0.11) 0%,transparent 68%);pointer-events:none}
+.glow2{position:absolute;width:380px;height:380px;left:-80px;bottom:-80px;
+  background:radial-gradient(circle,rgba(21,101,192,0.15) 0%,transparent 70%);pointer-events:none}
+.cover-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,180,216,0.12);border:1px solid rgba(0,180,216,0.28);
+  color:var(--cyan);padding:5px 15px;border-radius:20px;
+  font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;
+  margin-bottom:28px;font-family:var(--font-vi)
+}
+.cover-tag i{width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.cover-h1{font-family:var(--font-head);font-size:72px;font-weight:700;line-height:.95;
+  color:#fff;letter-spacing:-1px;margin-bottom:10px}
+.cover-h1 span{color:var(--cyan)}
+.cover-sub{font-family:var(--font-vi);font-size:20px;font-weight:300;
+  color:rgba(255,255,255,0.45);letter-spacing:3px;margin-bottom:44px}
+.cover-desc{font-size:16px;color:rgba(255,255,255,0.65);max-width:600px;
+  line-height:1.75;margin-bottom:48px;font-weight:300}
+.cover-kpis{display:flex;gap:0;border-top:1px solid rgba(255,255,255,0.08);
+  border-bottom:1px solid rgba(255,255,255,0.08);padding:24px 0;margin-bottom:44px}
+.kpi-item{flex:1;padding:0 28px;border-right:1px solid rgba(255,255,255,0.08)}
+.kpi-item:first-child{padding-left:0}
+.kpi-item:last-child{border-right:none}
+.kpi-num{font-family:var(--font-head);font-size:34px;font-weight:700;color:#fff;line-height:1}
+.kpi-num em{color:var(--cyan);font-style:normal}
+.kpi-label{font-size:11px;color:rgba(255,255,255,0.38);letter-spacing:.8px;
+  text-transform:uppercase;margin-top:4px;font-family:var(--font-vi)}
+.cover-meta{display:flex;gap:32px;align-items:center;flex-wrap:wrap}
+.meta-item{display:flex;flex-direction:column;gap:2px}
+.meta-key{font-size:10px;color:rgba(255,255,255,0.28);letter-spacing:.8px;text-transform:uppercase;font-family:var(--font-vi)}
+.meta-val{font-size:13px;color:rgba(255,255,255,0.65);font-weight:600;font-family:var(--font-vi)}
+.meta-sep{width:1px;height:30px;background:rgba(255,255,255,0.1)}
+
+/* ── SECTION DIVIDER ── */
+.sec-div{
+  padding:44px 64px;
+  background:linear-gradient(135deg,var(--navy) 0%,#0D2A5A 100%);
+  position:relative;overflow:hidden;
+  border-top:none!important;
+}
+.sec-div-bg{
+  position:absolute;right:0;top:0;bottom:0;width:45%;
+  background:linear-gradient(90deg,transparent,rgba(0,180,216,0.04))
+}
+.sec-num-bg{
+  position:absolute;right:60px;top:50%;transform:translateY(-50%);
+  font-family:var(--font-head);font-size:110px;font-weight:700;
+  color:rgba(0,180,216,0.07);line-height:1;pointer-events:none
+}
+.sec-inner{position:relative;z-index:2}
+.sec-tag{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:6px;font-family:var(--font-vi)}
+.sec-title{font-family:var(--font-vi);font-size:32px;font-weight:700;color:#fff;line-height:1.15}
+.sec-desc{font-size:14px;color:rgba(255,255,255,0.45);margin-top:6px;font-family:var(--font-vi)}
+
+/* ── SLIDE HEADER ── */
+.sh{margin-bottom:40px}
+.sh-tag{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:8px;font-family:var(--font-vi)}
+.sh-title{font-family:var(--font-vi);font-size:34px;font-weight:700;color:var(--navy);line-height:1.15}
+.sh-title em{color:var(--blue-light);font-style:normal}
+.sh-line{width:44px;height:3px;background:linear-gradient(90deg,var(--cyan),transparent);
+  border-radius:2px;margin-top:12px}
+.sh-desc{font-size:15px;color:var(--text-mid);margin-top:12px;max-width:700px;line-height:1.7;font-family:var(--font-vi)}
+
+/* ── CARDS ── */
+.card{background:var(--white);border-radius:var(--r);
+  padding:24px;box-shadow:var(--shadow-sm);border:1px solid var(--border);
+  transition:box-shadow .2s,transform .2s}
+.card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.card-dark{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
+  border-radius:var(--r);padding:24px}
+
+/* ── GRIDS ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+
+/* ── TABLES ── */
+.tbl{width:100%;border-collapse:separate;border-spacing:0;
+  border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm)}
+.tbl thead{background:var(--navy)}
+.tbl thead th{
+  padding:13px 18px;text-align:left;
+  font-family:var(--font-vi);font-size:11px;font-weight:700;
+  color:var(--cyan);letter-spacing:1.5px;text-transform:uppercase
+}
+.tbl tbody tr{background:var(--white)}
+.tbl tbody tr:nth-child(even){background:#F8FAFE}
+.tbl tbody tr:hover{background:#EEF4FF}
+.tbl td{
+  padding:13px 18px;font-size:13px;color:var(--text);
+  border-bottom:1px solid rgba(9,23,43,0.05);vertical-align:top;
+  font-family:var(--font-vi);line-height:1.55
+}
+.tbl td:first-child{font-weight:600;color:var(--navy)}
+.tbl-center td,.tbl-center th{text-align:center}
+.tbl-center td:first-child{text-align:left}
+.tbl .hl-col{background:rgba(0,180,216,0.05)!important;font-weight:600}
+.tbl .hl-col:first-child{color:var(--navy)!important}
+
+/* ── STAT CARDS ── */
+.stat{background:var(--white);border-radius:var(--r);padding:22px 20px;
+  box-shadow:var(--shadow-sm);border:1px solid var(--border);
+  position:relative;overflow:hidden}
+.stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.stat.blue::before{background:linear-gradient(90deg,var(--blue),var(--cyan))}
+.stat.gold::before{background:linear-gradient(90deg,var(--gold),var(--gold-light))}
+.stat.green::before{background:linear-gradient(90deg,var(--green),#34D399)}
+.stat.teal::before{background:linear-gradient(90deg,var(--teal),var(--cyan))}
+.stat-num{font-family:var(--font-head);font-size:38px;font-weight:700;color:var(--navy);line-height:1}
+.stat-num .u{font-size:16px;color:var(--text-light);font-weight:400;font-family:var(--font-vi)}
+.stat-lbl{font-size:11px;color:var(--text-light);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-top:4px;font-family:var(--font-vi)}
+
+/* ── VISION BOX ── */
+.vision{
+  background:linear-gradient(135deg,var(--navy) 0%,#0D2A5A 100%);
+  border-radius:14px;padding:36px 40px;
+  border-left:4px solid var(--cyan);
+  position:relative;overflow:hidden
+}
+.vision::after{
+  content:'"';position:absolute;right:32px;top:12px;
+  font-size:140px;color:rgba(0,180,216,0.06);font-family:Georgia,serif;line-height:1
+}
+.vision p{font-size:18px;color:#fff;line-height:1.75;font-weight:300;position:relative;z-index:2;font-family:var(--font-vi)}
+.vision p strong{color:var(--cyan);font-weight:700}
+
+/* ── BADGES ── */
+.badge{display:inline-block;padding:3px 10px;border-radius:10px;font-size:11px;font-weight:600;font-family:var(--font-vi)}
+.badge-cyan{background:rgba(0,180,216,0.12);color:var(--teal)}
+.badge-blue{background:rgba(21,101,192,0.1);color:#1565C0}
+.badge-gold{background:rgba(245,158,11,0.12);color:#B45309}
+.badge-green{background:rgba(16,185,129,0.1);color:#059669}
+.badge-red{background:rgba(239,68,68,0.1);color:#DC2626}
+.badge-gray{background:rgba(107,114,128,0.12);color:#6B7280}
+.check-y{color:var(--green);font-weight:800;font-size:15px}
+.check-n{color:#D1D5DB;font-size:14px}
+
+/* ── NOTE BOX ── */
+.note{
+  background:rgba(0,180,216,0.06);border:1px solid rgba(0,180,216,0.2);
+  border-radius:8px;padding:14px 18px;
+  font-size:13px;color:var(--text-mid);line-height:1.6;margin-top:16px;
+  font-family:var(--font-vi)
+}
+
+/* ── HIGHLIGHT CALLOUT ── */
+.callout{
+  border-left:3px solid var(--cyan);
+  padding:12px 18px;border-radius:0 8px 8px 0;
+  background:rgba(0,180,216,0.05);
+  font-size:14px;color:var(--text-mid);line-height:1.65;
+  font-family:var(--font-vi)
+}
+.callout strong{color:var(--navy)}
+
+/* ── PROBLEM CARDS ── */
+.prob{background:var(--white);border-radius:var(--r);padding:22px;
+  box-shadow:var(--shadow-sm);border:1px solid var(--border);
+  border-top:3px solid transparent}
+.prob.c1{border-top-color:var(--blue)}
+.prob.c2{border-top-color:var(--teal)}
+.prob.c3{border-top-color:var(--gold)}
+.prob.c4{border-top-color:#8B5CF6}
+.prob-icon{font-size:22px;margin-bottom:10px}
+.prob-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:6px;font-family:var(--font-vi)}
+.prob-desc{font-size:12px;color:var(--text-mid);line-height:1.6;font-family:var(--font-vi)}
+
+/* ── PROGRESS BAR ── */
+.prog-wrap{margin-bottom:10px}
+.prog-row{display:flex;justify-content:space-between;margin-bottom:4px}
+.prog-name{font-size:13px;color:var(--navy);font-weight:600;font-family:var(--font-vi)}
+.prog-pct{font-family:var(--font-head);font-size:14px;color:var(--cyan);font-weight:700}
+.prog-bar{height:6px;background:rgba(9,23,43,0.07);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;border-radius:3px}
+
+/* ── ARCH LAYERS ── */
+.arch-layer{
+  background:var(--white);border-radius:9px;padding:14px 20px;
+  box-shadow:var(--shadow-sm);margin-bottom:8px;
+  display:flex;align-items:center;gap:18px;
+  border-left:4px solid transparent;transition:transform .2s
+}
+.arch-layer:hover{transform:translateX(3px)}
+.arch-layer.l1{border-left-color:var(--cyan)}
+.arch-layer.l2{border-left-color:var(--blue-light)}
+.arch-layer.l3{border-left-color:var(--teal)}
+.arch-layer.l4{border-left-color:var(--gold)}
+.arch-layer.l5{border-left-color:#8B5CF6}
+.arch-lbl{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;width:108px;flex-shrink:0;font-family:var(--font-vi)}
+.l1 .arch-lbl{color:var(--cyan)} .l2 .arch-lbl{color:var(--blue-light)}
+.l3 .arch-lbl{color:var(--teal)} .l4 .arch-lbl{color:var(--gold)} .l5 .arch-lbl{color:#8B5CF6}
+.arch-chips{display:flex;gap:7px;flex-wrap:wrap}
+.chip{padding:4px 10px;border-radius:14px;font-size:11px;font-weight:600;
+  background:rgba(9,23,43,0.05);color:var(--text-mid);border:1px solid rgba(9,23,43,0.07);font-family:var(--font-vi)}
+
+/* ── PMO ITEMS ── */
+.pmo-item{background:var(--white);border-radius:var(--r);padding:18px 22px;
+  box-shadow:var(--shadow-sm);border:1px solid var(--border);
+  display:flex;gap:14px;align-items:flex-start;margin-bottom:10px}
+.pmo-num{width:30px;height:30px;border-radius:7px;background:var(--navy);color:var(--cyan);
+  font-family:var(--font-head);font-size:14px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pmo-item h4{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:3px;font-family:var(--font-vi)}
+.pmo-item p{font-size:12px;color:var(--text-mid);line-height:1.55;font-family:var(--font-vi)}
+
+/* ── SWOT ── */
+.swot{display:grid;grid-template-columns:1fr 1fr;gap:3px;border-radius:var(--r);overflow:hidden}
+.swot-cell{padding:24px 28px}
+.swot-cell.S{background:linear-gradient(135deg,rgba(0,150,199,.09),rgba(0,150,199,.04))}
+.swot-cell.W{background:linear-gradient(135deg,rgba(239,68,68,.08),rgba(239,68,68,.03))}
+.swot-cell.O{background:linear-gradient(135deg,rgba(16,185,129,.09),rgba(16,185,129,.04))}
+.swot-cell.T{background:linear-gradient(135deg,rgba(245,158,11,.09),rgba(245,158,11,.04))}
+.swot-l{font-family:var(--font-head);font-size:44px;font-weight:700;line-height:1;margin-bottom:3px}
+.swot-cell.S .swot-l{color:rgba(0,150,199,.25)} .swot-cell.W .swot-l{color:rgba(239,68,68,.25)}
+.swot-cell.O .swot-l{color:rgba(16,185,129,.25)} .swot-cell.T .swot-l{color:rgba(245,158,11,.25)}
+.swot-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;color:var(--navy);font-family:var(--font-vi)}
+.swot-list li{font-size:12px;color:var(--text-mid);line-height:1.55;margin-bottom:5px;
+  list-style:none;display:flex;gap:7px;font-family:var(--font-vi)}
+.swot-list li::before{content:'•';flex-shrink:0;color:var(--text-light)}
+
+/* ── TEAM TABLE ── */
+.team-count{display:inline-flex;align-items:center;justify-content:center;
+  width:26px;height:26px;border-radius:50%;
+  background:var(--navy);color:var(--cyan);
+  font-family:var(--font-head);font-size:13px;font-weight:700}
+
+/* ── RACI ── */
+.raci-r{background:rgba(13,71,161,.1);color:#1565C0;font-weight:700;padding:2px 7px;border-radius:5px;font-size:11px;font-family:var(--font-vi)}
+.raci-a{background:rgba(0,150,199,.1);color:var(--teal);font-weight:700;padding:2px 7px;border-radius:5px;font-size:11px;font-family:var(--font-vi)}
+.raci-c{background:rgba(245,158,11,.12);color:#B45309;font-weight:700;padding:2px 7px;border-radius:5px;font-size:11px;font-family:var(--font-vi)}
+.raci-i{background:rgba(148,163,184,.15);color:#9CA3AF;font-weight:700;padding:2px 7px;border-radius:5px;font-size:11px;font-family:var(--font-vi)}
+
+/* ── RISK ── */
+.risk-h{background:rgba(239,68,68,.1);color:#DC2626;font-weight:700;padding:2px 9px;border-radius:9px;font-size:11px;font-family:var(--font-vi)}
+.risk-m{background:rgba(245,158,11,.12);color:#B45309;font-weight:700;padding:2px 9px;border-radius:9px;font-size:11px;font-family:var(--font-vi)}
+.risk-l{background:rgba(16,185,129,.1);color:#059669;font-weight:700;padding:2px 9px;border-radius:9px;font-size:11px;font-family:var(--font-vi)}
+
+/* ── ECO CARDS ── */
+.eco{background:var(--white);border-radius:var(--r);padding:18px 14px;
+  box-shadow:var(--shadow-sm);border:1px solid var(--border);
+  display:flex;flex-direction:column;gap:8px;text-align:center;
+  border-top:3px solid transparent;transition:all .2s}
+.eco:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.eco.e1{border-top-color:#E53E3E} .eco.e2{border-top-color:var(--cyan)}
+.eco.e3{border-top-color:#FF4B2B} .eco.e4{border-top-color:var(--gold)} .eco.e5{border-top-color:#8B5CF6}
+.eco-icon{font-size:26px}
+.eco-name{font-family:var(--font-vi);font-size:14px;font-weight:700;color:var(--navy)}
+.eco-role{font-size:11px;color:var(--text-light);line-height:1.45;font-family:var(--font-vi)}
+.eco-data{font-size:11px;font-weight:600;color:var(--teal);font-family:var(--font-vi)}
+
+/* ── CANVAS WRAPPER ── */
+.chart-wrap{position:relative;width:100%;background:var(--white);
+  border-radius:var(--r);padding:20px;box-shadow:var(--shadow-sm);
+  border:1px solid var(--border)}
+.chart-title{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:14px;font-family:var(--font-vi)}
+
+/* ── FLOWCHART ── */
+.flow-node{
+  background:var(--navy);color:#fff;
+  padding:10px 16px;border-radius:8px;font-size:12px;font-weight:600;
+  text-align:center;font-family:var(--font-vi);line-height:1.4
+}
+.flow-node.alt{background:rgba(0,180,216,.12);color:var(--navy);border:1px solid rgba(0,180,216,.3)}
+.flow-node.ok{background:rgba(16,185,129,.12);color:#065F46;border:1px solid rgba(16,185,129,.3)}
+.flow-node.highlight{background:var(--cyan);color:var(--navy);font-weight:700}
+.flow-arr{display:flex;align-items:center;justify-content:center;color:var(--cyan);font-size:18px;padding:3px 0}
+.flow-arr-h{display:flex;align-items:center;color:var(--cyan);font-size:18px;padding:0 4px}
+.flow-h{display:flex;align-items:center;gap:0;flex-wrap:wrap}
+
+/* ── GANTT ── */
+.gantt-wrap{background:var(--white);border-radius:var(--r);padding:24px;
+  box-shadow:var(--shadow-sm);border:1px solid var(--border)}
+.gantt-title{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:16px;font-family:var(--font-vi)}
+.gantt-months{display:grid;gap:0;margin-bottom:6px}
+.gantt-month{font-size:10px;color:var(--text-light);text-align:center;font-family:var(--font-vi);font-weight:600}
+.gantt-row{display:grid;gap:0;margin-bottom:4px;align-items:center}
+.gantt-label{font-size:11px;color:var(--navy);font-weight:600;font-family:var(--font-vi);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gantt-bar-wrap{position:relative;height:20px;background:rgba(9,23,43,.05);border-radius:10px;overflow:hidden}
+.gantt-bar{position:absolute;top:0;bottom:0;border-radius:10px;display:flex;align-items:center;padding-left:7px}
+.gantt-bar-text{font-size:10px;font-weight:700;color:#fff;white-space:nowrap;font-family:var(--font-vi)}
+
+/* ── KANBAN ── */
+.kanban{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.kb-col{background:var(--bg);border-radius:var(--r);padding:16px}
+.kb-col-title{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  margin-bottom:12px;font-family:var(--font-vi)}
+.kb-col.poc .kb-col-title{color:var(--teal)}
+.kb-col.mvp .kb-col-title{color:var(--blue-light)}
+.kb-col.gtm .kb-col-title{color:var(--gold)}
+.kb-card{background:var(--white);border-radius:8px;padding:12px 14px;
+  box-shadow:var(--shadow-sm);margin-bottom:8px;border:1px solid var(--border)}
+.kb-card-tag{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;font-family:var(--font-vi)}
+.poc .kb-card-tag{color:var(--teal)} .mvp .kb-card-tag{color:var(--blue-light)} .gtm .kb-card-tag{color:var(--gold)}
+.kb-card-title{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:3px;font-family:var(--font-vi)}
+.kb-card-desc{font-size:11px;color:var(--text-light);line-height:1.5;font-family:var(--font-vi)}
+.kb-meta{display:flex;justify-content:space-between;margin-top:8px;font-size:10px;color:var(--text-light);font-family:var(--font-vi)}
+
+/* ── CLOSING ── */
+#closing{
+  background:var(--navy);min-height:60vh;
+  display:flex;align-items:center;justify-content:center;text-align:center
+}
+.closing-inner{position:relative;z-index:2;max-width:680px;padding:48px}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--navy);padding:32px 64px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-top:1px solid rgba(0,180,216,.12)
+}
+.foot-brand{font-family:var(--font-head);font-size:18px;font-weight:700;color:#fff}
+.foot-brand span{color:var(--cyan)}
+.foot-note{font-size:11px;color:rgba(255,255,255,.25);font-family:var(--font-vi)}
+.foot-meta{font-size:11px;color:rgba(255,255,255,.25);text-align:right;line-height:1.75;font-family:var(--font-vi)}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-thumb{background:var(--cyan);border-radius:3px}
+
+/* ── ROI TABLE COLORS ── */
+.roi-pos{color:#059669!important;font-weight:700}
+.roi-neg{color:#DC2626!important;font-weight:700}
+
+/* ── CONFIDENTIAL TAG ── */
+.conf-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);
+  color:#B91C1C;padding:3px 10px;border-radius:6px;
+  font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  font-family:var(--font-vi)
+}
+
+/* Responsive guards */
+@media(max-width:1100px){
+  .slide{padding:76px 40px 48px}
+  .cover-inner{padding:64px 40px}
+  .sec-div{padding:36px 40px}
+  nav{padding:0 28px}
+  .nav-links a{font-size:10px;padding:4px 7px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">BFC <span>·</span> BLOCKCHAIN FOR CONSUMER</div>
+  <div class="nav-links">
+    <a href="#cover">Cover</a>
+    <a href="#s1">Giới thiệu</a>
+    <a href="#s2">Use Cases</a>
+    <a href="#s3">Công nghệ</a>
+    <a href="#s4">Tính năng</a>
+    <a href="#s5">Lộ trình</a>
+    <a href="#s6">Ngân sách</a>
+    <a href="#s7">Đội ngũ</a>
+    <a href="#s8">Cạnh tranh</a>
+    <a href="#s9">Rủi ro</a>
+    <a href="#s10">PMO</a>
+  </div>
+  <div class="nav-badge">v2.0 · Tháng 3/2026 · <span class="conf-tag">🔒 Mật</span></div>
+</nav>
+
+<!-- ══════════════════════════════════════════════════
+     COVER
+══════════════════════════════════════════════════ -->
+<section id="cover" style="background:var(--navy);min-height:100vh;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;">
+  <div class="grid-bg"></div>
+  <div class="glow1"></div>
+  <div class="glow2"></div>
+  <div class="cover-inner">
+    <div class="cover-tag"><i></i> Galaxy Holdings · Sovico Group · Đề xuất Dự án v2.0</div>
+    <div class="cover-h1">BLOCKCHAIN<br><span>FOR CONSUMER</span></div>
+    <div class="cover-sub">Nền tảng Tài chính số và Loyalty</div>
+    <div class="cover-desc">Hệ sinh thái số tích hợp đầu tiên tại Việt Nam kết nối thanh toán, loyalty và tài chính toàn diện trên nền tảng Hyperledger Fabric — minh bạch, tự động và không phụ thuộc vào yếu tố con người.</div>
+    <div class="cover-kpis">
+      <div class="kpi-item"><div class="kpi-num">$<em>5</em>M</div><div class="kpi-label">Tổng ngân sách</div></div>
+      <div class="kpi-item"><div class="kpi-num">24<em> T</em></div><div class="kpi-label">Thời gian triển khai</div></div>
+      <div class="kpi-item"><div class="kpi-num">10–20<em>M</em></div><div class="kpi-label">Người dùng mục tiêu</div></div>
+      <div class="kpi-item"><div class="kpi-num"><em>3</em> GĐ</div><div class="kpi-label">Giai đoạn triển khai</div></div>
+      <div class="kpi-item"><div class="kpi-num"><em>5</em>+</div><div class="kpi-label">Ngành ứng dụng</div></div>
+    </div>
+    <div class="cover-meta">
+      <div class="meta-item"><div class="meta-key">Công nghệ</div><div class="meta-val">Hyperledger Fabric 2.x + Microservices</div></div>
+      <div class="meta-sep"></div>
+      <div class="meta-item"><div class="meta-key">Tech Lead</div><div class="meta-val">Trần Hữu Nhân</div></div>
+      <div class="meta-sep"></div>
+      <div class="meta-item"><div class="meta-key">Project Director</div><div class="meta-val">Nguyễn Văn Linh</div></div>
+      <div class="meta-sep"></div>
+      <div class="meta-item"><div class="meta-key">Phiên bản</div><div class="meta-val">2.0 · Tháng 3/2026</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION 01 ══ -->
+<div id="s1" class="sec-div">
+  <div class="sec-div-bg"></div><div class="sec-num-bg">01</div>
+  <div class="sec-inner">
+    <div class="sec-tag">Section 01</div>
+    <div class="sec-title">Giới thiệu Dự án</div>
+    <div class="sec-desc">Tầm nhìn · Bối cảnh · Mục tiêu chiến lược</div>
+  </div>
+</div>
+
+<!-- Executive Summary -->
+<section class="slide" style="background:var(--white);">
+  <div class="sh"><div class="sh-tag">Executive Summary</div><h2 class="sh-title">Tóm tắt <em>Dự án</em></h2><div class="sh-line"></div><p class="sh-desc">Hai điểm nghẽn cốt lõi chưa được giải quyết triệt để tại thị trường bán lẻ Việt Nam.</p></div>
+  <div class="g2" style="gap:32px;align-items:start;">
+    <div>
+      <div class="g2" style="gap:14px;margin-bottom:20px;">
+        <div class="prob c1"><div class="prob-icon">⚙️</div><div class="prob-title">Điểm nghẽn #1: Vận hành thủ công</div><div class="prob-desc">Quy trình thanh toán và đối soát khuyến mại phụ thuộc nhiều vào thao tác thủ công, tốn kém chi phí vận hành và thiếu minh bạch dữ liệu.</div></div>
+        <div class="prob c2"><div class="prob-icon">🏦</div><div class="prob-title">Điểm nghẽn #2: Tài chính chưa toàn diện</div><div class="prob-desc">Phần lớn người tiêu dùng phổ thông chưa được tiếp cận đầy đủ dịch vụ tài chính chính thức do thiếu lịch sử tín dụng.</div></div>
+      </div>
+      <div class="vision">
+        <p>Xây dựng hệ sinh thái số tích hợp đầu tiên tại Việt Nam, nơi <strong>thanh toán, khuyến mại và tiếp cận tài chính</strong> diễn ra tự động, minh bạch và không phụ thuộc vào yếu tố con người — mang lại lợi ích cho cả ba bên: nhà bán lẻ, ngân hàng và người tiêu dùng.</p>
+      </div>
+    </div>
+    <div>
+      <!-- Value prop visual -->
+      <div style="background:var(--bg);border-radius:var(--r);padding:22px;margin-bottom:18px;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-light);margin-bottom:16px;font-family:var(--font-vi);">Ba nhóm giá trị cốt lõi</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;gap:14px;align-items:flex-start;padding:12px;background:rgba(0,180,216,.06);border-radius:8px;border-left:3px solid var(--cyan)">
+            <span style="font-size:20px;">💳</span>
+            <div><div style="font-weight:700;color:var(--navy);font-size:13px;font-family:var(--font-vi);">Thanh toán không tiền mặt</div><div style="font-size:11px;color:var(--text-light);margin-top:2px;font-family:var(--font-vi);">QR/NFC, không thẻ vật lý, bảo mật blockchain</div></div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start;padding:12px;background:rgba(245,158,11,.06);border-radius:8px;border-left:3px solid var(--gold)">
+            <span style="font-size:20px;">⭐</span>
+            <div><div style="font-weight:700;color:var(--navy);font-size:13px;font-family:var(--font-vi);">Loyalty & Khuyến mại tự động</div><div style="font-size:11px;color:var(--text-light);margin-top:2px;font-family:var(--font-vi);">Smart Contract tích điểm đa ngành, NFT Voucher</div></div>
+          </div>
+          <div style="display:flex;gap:14px;align-items:flex-start;padding:12px;background:rgba(16,185,129,.06);border-radius:8px;border-left:3px solid var(--green)">
+            <span style="font-size:20px;">🏦</span>
+            <div><div style="font-weight:700;color:var(--navy);font-size:13px;font-family:var(--font-vi);">Unsecured Lending tự động</div><div style="font-size:11px;color:var(--text-light);margin-top:2px;font-family:var(--font-vi);">Vay tín chấp dựa trên lịch sử on-chain</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="g2" style="gap:12px;">
+        <div class="stat blue"><div class="stat-num">500K<span class="u"> MVP</span></div><div class="stat-lbl">Người dùng ban đầu</div></div>
+        <div class="stat gold"><div class="stat-num">10–20<span class="u">M</span></div><div class="stat-lbl">Mục tiêu Go-Live</div></div>
+        <div class="stat teal"><div class="stat-num">24<span class="u"> T</span></div><div class="stat-lbl">Thời gian triển khai</div></div>
+        <div class="stat green"><div class="stat-num">$5<span class="u">M</span></div><div class="stat-lbl">Tổng ngân sách</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Bối cảnh & Mục tiêu -->
+<section class="slide" style="background:var(--bg);">
+  <div class="sh"><div class="sh-tag">1.2 – 1.3</div><h2 class="sh-title">Bối cảnh & <em>Mục tiêu chiến lược</em></h2><div class="sh-line"></div></div>
+  <div class="g4" style="gap:14px;margin-bottom:28px;">
+    <div class="prob c1"><div class="prob-icon">🏪</div><div class="prob-title">Bán lẻ & Doanh nghiệp</div><div class="prob-desc">Chi phí đối soát cao, phụ thuộc quy trình thủ công, thiếu minh bạch dữ liệu đa bên.</div></div>
+    <div class="prob c2"><div class="prob-icon">🏦</div><div class="prob-title">Ngân hàng & Tài chính</div><div class="prob-desc">Đánh giá tín dụng truyền thống chậm, không chính xác với nhóm underbanked.</div></div>
+    <div class="prob c3"><div class="prob-icon">👤</div><div class="prob-title">Người tiêu dùng</div><div class="prob-desc">Trải nghiệm phân mảnh, loyalty points không dùng linh hoạt giữa các thương hiệu.</div></div>
+    <div class="prob c4"><div class="prob-icon">🔗</div><div class="prob-title">Hệ thống hiện tại</div><div class="prob-desc">Nền tảng loyalty hoạt động silo, không có hạ tầng chung để đối soát tự động.</div></div>
+  </div>
+  <table class="tbl">
+    <thead><tr><th>Nhóm mục tiêu</th><th>Nội dung cụ thể</th><th>KPI đo lường</th></tr></thead>
+    <tbody>
+      <tr><td>💳 Thanh toán số hiệu quả</td><td>Cổng thanh toán không tiền mặt, không thẻ vật lý; đối soát tự động qua Smart Contract</td><td><span class="badge badge-cyan">Tốc độ &lt;3 giây</span> <span class="badge badge-cyan">Lỗi &lt;0.01%</span></td></tr>
+      <tr><td>⭐ Loyalty & Khuyến mại đa ngành</td><td>Nền tảng điểm thưởng và voucher dùng chung giữa các ngành: bán lẻ, hàng không, giải trí, giáo dục</td><td><span class="badge badge-gold">&gt;30% giảm chi phí vận hành</span></td></tr>
+      <tr><td>🏦 Tài chính toàn diện</td><td>Tín dụng tự động dựa trên hành vi giao dịch; cấp hạn mức Unsecured Lending nhanh, minh bạch</td><td><span class="badge badge-green">&gt;70% phê duyệt tự động</span> <span class="badge badge-green">&lt;5 phút</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ══ SECTION 02 ══ -->
+<div id="s2" class="sec-div">
+  <div class="sec-div-bg"></div><div class="sec-num-bg">02</div>
+  <div class="sec-inner">
+    <div class="sec-tag">Section 02</div>
+    <div class="sec-title">Phạm vi ứng dụng & Use Cases</div>
+    <div class="sec-desc">Đa ngành · Unsecured Lending · Hệ sinh thái Sovico</div>
+  </div>
+</div>
+
+<!-- Use Cases + Ecosystem -->
+<section id="s2-main" class="slide" style="background:var(--white);">
+  <div class="sh"><div class="sh-tag">Phạm vi ứng dụng</div><h2 class="sh-title">Common Infrastructure Layer — <em>5 ngành</em></h2><div class="sh-line"></div><p class="sh-desc">BFC là cổng hạ tầng chung, không giới hạn ở siêu thị. Bất kỳ doanh nghiệp cần thanh toán, loyalty và tín dụng đều có thể kết nối.</p></div>
+  <table class="tbl" style="margin-bottom:24px;">
+    <thead><tr><th>Ngành</th><th>Thanh toán</th><th>Loyalty / Khuyến mại</th><th>Tài chính</th></tr></thead>
+    <tbody>
+      <tr><td>🛒 Bán lẻ & Siêu thị</td><td>Thanh toán QR/NFC tại quầy, ví điện tử</td><td>Điểm thưởng tích lũy, cashback, voucher cá nhân hóa</td><td>Buy Now Pay Later</td></tr>
+      <tr><td>✈️ Hàng không</td><td>Thanh toán vé, phụ phí dịch vụ</td><td>Dặm thưởng (miles), nâng hạng ghế, lounge access</td><td>Tín dụng đặt vé trả dần</td></tr>
+      <tr><td>🎬 Vui chơi Giải trí</td><td>Thanh toán vé, F&B, merchandise</td><td>Điểm thành viên, ưu đãi sự kiện, combo package</td><td>Trả góp 0% dịch vụ cao cấp</td></tr>
+      <tr><td>📚 Giáo dục</td><td>Học phí, tài liệu, khóa học online</td><td>Học bổng token, điểm chuyên cần, phần thưởng thành tích</td><td>Vay học phí tín chấp</td></tr>
+      <tr><td>🏦 Ngân hàng & Tài chính</td><td>Chuyển khoản, nạp ví, thanh toán hóa đơn</td><td>Cashback thẻ, ưu đãi lãi suất theo điểm tín dụng</td><td>Đánh giá tín dụng + Unsecured Lending</td></tr>
+    </tbody>
+  </table>
+  <!-- Ecosystem -->
+  <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-light);margin-bottom:14px;font-family:var(--font-vi);">Hệ sinh thái Sovico — Nguồn dữ liệu đa chiều độc quyền</div>
+  <div class="g5">
+    <div class="eco e1"><div class="eco-icon">🏦</div><div class="eco-name">HDBank</div><div class="eco-role">Anchor bank — thanh toán, Lending, Credit Scoring</div><div class="eco-data">6M+ khách hàng</div></div>
+    <div class="eco e2"><div class="eco-icon">📱</div><div class="eco-name">Vikki</div><div class="eco-role">Digital Bank — kênh mobile-first tới người dùng trẻ</div><div class="eco-data">Mobile-first</div></div>
+    <div class="eco e3"><div class="eco-icon">✈️</div><div class="eco-name">Vietjet Air</div><div class="eco-role">Hành vi du lịch — miles, voucher NFT vé máy bay</div><div class="eco-data">46% thị phần nội địa</div></div>
+    <div class="eco e4"><div class="eco-icon">🏖️</div><div class="eco-name">Furama Resort</div><div class="eco-role">Nghỉ dưỡng cao cấp — đổi loyalty points tại resort</div><div class="eco-data">Premium segment</div></div>
+    <div class="eco e5"><div class="eco-icon">🛍️</div><div class="eco-name">Menas Retail</div><div class="eco-role">Bán lẻ sân bay & thương mại — thanh toán, tích điểm</div><div class="eco-data">Triệu lượt/năm</div></div>
+  </div>
+</section>
+
+<!-- Unsecured Lending Flowchart -->
+<section class="slide" style="background:var(--bg);">
+  <div class="sh"><div class="sh-tag">2.1 — Tính năng đột phá</div><h2 class="sh-title">Unsecured Lending — <em>Điểm khác biệt cốt lõi</em></h2><div class="sh-line"></div><p class="sh-desc">Thay vì CIC và tài sản thế chấp, hệ thống đánh giá hoàn toàn tự động từ dữ liệu giao dịch on-chain. Mục tiêu: <strong>&lt;5 phút</strong> từ yêu cầu đến giải ngân.</p></div>
+  <div class="g2" style="gap:28px;align-items:start;">
+    <div>
+      <!-- Lending Flowchart -->
+      <div class="chart-wrap" style="padding:24px;">
+        <div class="chart-title">Quy trình vay tự động — Lending Flowchart</div>
+        <div style="display:flex;flex-direction:column;gap:0;">
+          <div class="flow-node">📱 Khách hàng gửi yêu cầu vay qua App</div>
+          <div class="flow-arr">↓</div>
+          <div class="flow-node alt">🔗 Blockchain truy xuất lịch sử giao dịch on-chain<br><small style="font-size:10px;opacity:.7">Tần suất · Giá trị · Loại hình · Tính đều đặn</small></div>
+          <div class="flow-arr">↓</div>
+          <div class="flow-node alt">🤖 ML Model tính Credit Score<br><small style="font-size:10px;opacity:.7">Pattern chi tiêu · Thu nhập ước tính · Behavioral score</small></div>
+          <div class="flow-arr">↓</div>
+          <div class="flow-node">⚖️ Smart Contract kiểm tra điều kiện & hạn mức</div>
+          <div class="flow-arr">↓</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div>
+              <div class="flow-node ok">✅ Phê duyệt tự động<br><small style="font-size:10px;opacity:.8">&gt;70% hồ sơ hợp lệ</small></div>
+              <div class="flow-arr">↓</div>
+              <div class="flow-node highlight">💰 Giải ngân tức thì<br><small style="font-size:10px;opacity:.8">Toàn bộ &lt;5 phút</small></div>
+            </div>
+            <div>
+              <div class="flow-node" style="background:rgba(239,68,68,.1);color:#7F1D1D;border:1px solid rgba(239,68,68,.2);">❌ Từ chối có lý do<br><small style="font-size:10px;opacity:.8">Minh bạch, audit trail</small></div>
+              <div class="flow-arr">↓</div>
+              <div class="flow-node alt">📈 Gợi ý cải thiện Score<br><small style="font-size:10px;opacity:.8">Vòng lặp tích cực</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div class="card" style="border-left:4px solid var(--cyan);">
+          <div style="font-weight:700;color:var(--navy);font-size:13px;margin-bottom:6px;font-family:var(--font-vi);">01 — Lịch sử giao dịch on-chain</div>
+          <div style="font-size:12px;color:var(--text-mid);line-height:1.6;font-family:var(--font-vi);">Tần suất, giá trị, loại hình giao dịch ghi nhận bất biến — không thể làm giả hay chỉnh sửa.</div>
+        </div>
+        <div class="card" style="border-left:4px solid var(--blue-light);">
+          <div style="font-weight:700;color:var(--navy);font-size:13px;margin-bottom:6px;font-family:var(--font-vi);">02 — Credit Score riêng biệt</div>
+          <div style="font-size:12px;color:var(--text-mid);line-height:1.6;font-family:var(--font-vi);">ML model tạo credit score từ behavioral data — độc lập hoàn toàn với hệ thống CIC truyền thống.</div>
+        </div>
+        <div class="card" style="border-left:4px solid var(--gold);">
+          <div style="font-weight:700;color:var(--navy);font-size:13px;margin-bottom:6px;font-family:var(--font-vi);">03 — Hạn mức tự động tăng</div>
+          <div style="font-size:12px;color:var(--text-mid);line-height:1.6;font-family:var(--font-vi);">Hạn mức tín dụng tự động tăng dần khi khách hàng duy trì lịch sử giao dịch tốt — vòng lặp tích cực.</div>
+        </div>
+        <div class="card" style="border-left:4px solid var(--green);">
+          <div style="font-weight:700;color:var(--navy);font-size:13px;margin-bottom:6px;font-family:var(--font-vi);">04 — Tuân thủ & Minh bạch</div>
+          <div style="font-size:12px;color:var(--text-mid);line-height:1.6;font-family:var(--font-vi);">Toàn bộ audit trail trên blockchain — đáp ứng báo cáo NHNN & Bộ Tài chính, không thao túng được.</div>
+        </div>
+      </div>
+      <div class="g2" style="gap:12px;margin-top:14px;">
+        <div style="background:var(--white);border-radius:var(--r);padding:16px;box-shadow:var(--shadow-sm);text-align:center;">
+          <div style="font-family:var(--font-head);font-size:34px;font-weight:700;color:var(--green);">&gt;70%</div>
+          <div style="font-size:11px;color:var(--text-light);text-transform:uppercase;letter-spacing:.8px;font-family:var(--font-vi);">Phê duyệt tự động</div>
+        </div>
+        <div style="background:var(--white);border-radius:var(--r);padding:16px;box-shadow:var(--shadow-sm);text-align:center;">
+          <div style="font-family:var(--font-head);font-size:34px;font-weight:700;color:var(--navy);">&lt;5<span style="font-size:16px;color:var(--text-light);font-family:var(--font-vi);"> phút</span></div>
+          <div style="font-size:11px;color:var(--text-light);text-transform:uppercase;letter-spacing:.8px;font-family:var(--font-vi);">Thời gian xử lý</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION 03 ══ -->
+<div id="s3" class="sec-div">
+  <div class="sec-div-bg"></div><div class="sec-num-bg">03</div>
+  <div class="sec-inner">
+    <div class="sec-tag">Section 03</div>
+    <div class="sec-title">Công nghệ Nền tảng</div>
+    <div class="sec-desc">Hyperledger Fabric · Microservices · Kiến trúc hệ thống</div>
+  </div>
+</div>
+
+<!-- Tech Comparison -->
+<section class="slide" style="background:var(--white);">
+  <div class="sh"><div class="sh-tag">3.1 — Lý do lựa chọn</div><h2 class="sh-title">Tại sao <em>Hyperledger Fabric</em>?</h2><div class="sh-line"></div><p class="sh-desc">Ba lý do cốt lõi: Permissioned network · Private channels · Không có cryptocurrency — đáp ứng yêu cầu NHNN Việt Nam và đã được triển khai production tại hàng chục ngân hàng quốc tế.</p></div>
+  <table class="tbl tbl-center">
+    <thead>
+      <tr>
+        <th style="text-align:left;">Tiêu chí</th>
+        <th style="color:#fff;font-size:12px;">Hyperledger Fabric ✓</th>
+        <th>Ethereum/Quorum</th><th>R3 Corda</th><th>DAML</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Loại mạng</td><td class="hl-col">Permissioned (liên minh)</td><td>Permissioned/Public</td><td>Permissioned</td><td>Permissioned</td></tr>
+      <tr><td>Thiết kế cho</td><td class="hl-col">Enterprise tổng quát</td><td>Finance + DeFi</td><td>Tài chính song phương</td><td>Legal contracts</td></tr>
+      <tr><td>Hiệu năng (TPS)</td><td class="hl-col" style="color:var(--green);font-weight:800;">3,000 – 20,000</td><td style="color:var(--text-light);">100 – 300</td><td style="color:var(--text-light);">170 – 1,700</td><td style="color:var(--text-light);">Tùy hạ tầng</td></tr>
+      <tr><td>Không cần crypto</td><td class="hl-col"><span class="check-y">✓</span></td><td><span class="check-n">✗ Gas fee</span></td><td><span class="check-y">✓</span></td><td><span class="check-y">✓</span></td></tr>
+      <tr><td>Private channels</td><td class="hl-col"><span class="check-y">✓ Hỗ trợ tốt</span></td><td><span class="check-n">Hạn chế</span></td><td><span class="check-y">✓</span></td><td>Hỗ trợ</td></tr>
+      <tr><td>Tương thích Core Banking</td><td class="hl-col" style="color:var(--green);font-weight:700;">Cao</td><td style="color:var(--text-light);">Trung bình</td><td style="color:var(--green);">Cao</td><td style="color:var(--green);">Cao</td></tr>
+      <tr><td>Bảo trợ</td><td class="hl-col">Linux Foundation</td><td>Ethereum Foundation</td><td>R3 Consortium</td><td>Digital Asset</td></tr>
+    </tbody>
+  </table>
+  <div class="note" style="margin-top:16px;">Triển khai production thực tế: <strong>we.trade</strong> (HSBC, Deutsche Bank, Santander…) · <strong>HKMA eTradeConnect</strong> (21 ngân hàng HK) · <strong>MAS Project Ubin</strong> (Singapore) · <strong>Bank of Thailand – Project Inthanon</strong></div>
+</section>
+
+<!-- Architecture -->
+<section class="slide" style="background:var(--bg);">
+  <div class="sh"><div class="sh-tag">3.3 – 3.4</div><h2 class="sh-title">Kiến trúc <em>Microservices + Hexagonal</em></h2><div class="sh-line"></div><p class="sh-desc">Hexagonal Architecture tổ chức code bên trong mỗi service · Microservices cho deployment và scale độc lập từng module.</p></div>
+  <div class="g2" style="gap:28px;align-items:start;">
+    <div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-light);margin-bottom:14px;font-family:var(--font-vi);">Stack kiến trúc theo lớp</div>
+      <div class="arch-layer l1"><div class="arch-lbl">Presentation</div><div class="arch-chips"><span class="chip">React Native</span><span class="chip">Flutter</span><span class="chip">iOS + Android</span></div></div>
+      <div class="arch-layer l2"><div class="arch-lbl">Gateway</div><div class="arch-chips"><span class="chip">API Gateway</span><span class="chip">Kong</span><span class="chip">AWS API GW</span><span class="chip">Open API</span></div></div>
+      <div class="arch-layer l3"><div class="arch-lbl">Core Services</div><div class="arch-chips"><span class="chip">Payment Service</span><span class="chip">Loyalty Engine</span><span class="chip">Lending Service</span><span class="chip">Identity Service</span></div></div>
+      <div class="arch-layer l4"><div class="arch-lbl">Platform</div><div class="arch-chips"><span class="chip">Grafana</span><span class="chip">ELK Stack</span><span class="chip">Firebase Notify</span><span class="chip">Prometheus</span></div></div>
+      <div class="arch-layer l5"><div class="arch-lbl">Blockchain + DB</div><div class="arch-chips"><span class="chip">Hyperledger Fabric 2.x</span><span class="chip">PostgreSQL</span><span class="chip">MongoDB</span><span class="chip">MinIO</span></div></div>
+    </div>
+    <div>
+      <div style="background:var(--navy);border-radius:var(--r);padding:24px;margin-bottom:16px;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--cyan);margin-bottom:16px;font-family:var(--font-vi);">Vì sao Microservices?</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--cyan);font-weight:700;flex-shrink:0;">→</span><span style="color:rgba(255,255,255,.72);font-size:13px;line-height:1.55;font-family:var(--font-vi);">Payment, Loyalty và Lending scale <strong style="color:#fff;">độc lập</strong> — nhu cầu tải khác nhau</span></div>
+          <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--cyan);font-weight:700;flex-shrink:0;">→</span><span style="color:rgba(255,255,255,.72);font-size:13px;line-height:1.55;font-family:var(--font-vi);">Onboarding đối tác mới: chỉ deploy/update <strong style="color:#fff;">service liên quan</strong></span></div>
+          <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--cyan);font-weight:700;flex-shrink:0;">→</span><span style="color:rgba(255,255,255,.72);font-size:13px;line-height:1.55;font-family:var(--font-vi);">Fault isolation: nếu Lending sự cố, <strong style="color:#fff;">Payment và Loyalty vẫn hoạt động</strong></span></div>
+        </div>
+      </div>
+      <table class="tbl tbl-center">
+        <thead><tr><th style="text-align:left;">Kiến trúc</th><th>Phù hợp BFC?</th></tr></thead>
+        <tbody>
+          <tr><td>Monolith</td><td><span class="check-n">✗ Khó scale</span></td></tr>
+          <tr><td>SOA + ESB</td><td><span class="check-n">✗ ESB bottleneck</span></td></tr>
+          <tr><td><strong>Microservices ✓</strong></td><td><span class="check-y">✓ Lựa chọn chính</span></td></tr>
+          <tr><td>Serverless</td><td><span class="badge badge-gold">Một phần — function phụ</span></td></tr>
+          <tr><td>Event-Driven</td><td><span class="check-y">✓ Kết hợp Microservices</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION 04 ══ -->
+<div id="s4" class="sec-div">
+  <div class="sec-div-bg"></div><div class="sec-num-bg">04</div>
+  <div class="sec-inner">
+    <div class="sec-tag">Section 04</div>
+    <div class="sec-title">Tính năng Cốt lõi</div>
+    <div class="sec-desc">Thanh toán · Loyalty · Unsecured Lending</div>
+  </div>
+</div>
+
+<!-- Features — Payment flow + Loyalty -->
+<section class="slide" style="background:var(--white);">
+  <div class="sh"><div class="sh-tag">4.1 – 4.3</div><h2 class="sh-title">Ba trụ cột <em>tính năng cốt lõi</em></h2><div class="sh-line"></div></div>
+  <div class="g2" style="gap:24px;margin-bottom:24px;">
+    <!-- Payment Flowchart -->
+    <div class="chart-wrap">
+      <div class="chart-title">💳 Cashless Payment — Luồng giao dịch</div>
+      <div style="display:flex;flex-direction:column;gap:0;">
+        <div class="flow-node alt">👤 Khách hàng khởi tạo thanh toán QR/NFC</div>
+        <div class="flow-arr">↓</div>
+        <div class="flow-node">🔐 API Gateway xác thực danh tính (KYC/OAuth)</div>
+        <div class="flow-arr">↓</div>
+        <div class="flow-node">⛓️ Chaincode kiểm tra số dư on-chain</div>
+        <div class="flow-arr">↓</div>
+        <div class="flow-node">📝 Ghi nhận giao dịch bất biến trên Blockchain</div>
+        <div class="flow-arr">↓</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div class="flow-node ok">✅ Merchant nhận xác nhận<br><small style="font-size:10px;">&lt;3 giây</small></div>
+          <div class="flow-node ok">🏦 Ngân hàng đối soát<br><small style="font-size:10px;">Real-time (vs T+2 cũ)</small></div>
+        </div>
+      </div>
+    </div>
+    <!-- Loyalty System -->
+    <div class="chart-wrap">
+      <div class="chart-title">⭐ Universal Loyalty System</div>
+      <div style="margin-bottom:14px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;text-align:center;">
+        <div style="padding:10px 8px;background:rgba(0,180,216,.08);border-radius:8px;">
+          <div style="font-size:18px;">🛒</div>
+          <div style="font-size:11px;color:var(--navy);font-weight:700;font-family:var(--font-vi);">Siêu thị</div>
+          <div style="font-size:10px;color:var(--teal);margin-top:3px;font-family:var(--font-vi);">Tích điểm</div>
+        </div>
+        <div style="padding:10px 8px;background:rgba(0,180,216,.08);border-radius:8px;">
+          <div style="font-size:18px;">✈️</div>
+          <div style="font-size:11px;color:var(--navy);font-weight:700;font-family:var(--font-vi);">Hàng không</div>
+          <div style="font-size:10px;color:var(--teal);margin-top:3px;font-family:var(--font-vi);">Tích miles</div>
+        </div>
+        <div style="padding:10px 8px;background:rgba(0,180,216,.08);border-radius:8px;">
+          <div style="font-size:18px;">🎬</div>
+          <div style="font-size:11px;color:var(--navy);font-weight:700;font-family:var(--font-vi);">Giải trí</div>
+          <div style="font-size:10px;color:var(--teal);margin-top:3px;font-family:var(--font-vi);">Tích điểm</div>
+        </div>
+        <div style="padding:10px 8px;background:rgba(0,180,216,.08);border-radius:8px;">
+          <div style="font-size:18px;">📚</div>
+          <div style="font-size:11px;color:var(--navy);font-weight:700;font-family:var(--font-vi);">Giáo dục</div>
+          <div style="font-size:10px;color:var(--teal);margin-top:3px;font-family:var(--font-vi);">Token</div>
+        </div>
+      </div>
+      <div style="text-align:center;padding:12px;background:var(--navy);border-radius:8px;margin-bottom:10px;">
+        <div style="color:var(--cyan);font-weight:700;font-size:13px;font-family:var(--font-vi);">🔗 Universal BFC Points (on-chain)</div>
+        <div style="color:rgba(255,255,255,.5);font-size:11px;margin-top:3px;font-family:var(--font-vi);">Tất cả điểm hợp nhất · Không hết hạn vô lý · NFT Voucher</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div style="padding:10px 12px;background:rgba(245,158,11,.08);border-radius:8px;border:1px solid rgba(245,158,11,.2);">
+          <div style="font-size:11px;font-weight:700;color:#B45309;font-family:var(--font-vi);">Targeted Promotion</div>
+          <div style="font-size:11px;color:var(--text-mid);margin-top:3px;font-family:var(--font-vi);">Smart Contract cá nhân hóa — chỉ áp dụng cho user đã giao dịch qua platform</div>
+        </div>
+        <div style="padding:10px 12px;background:rgba(16,185,129,.08);border-radius:8px;border:1px solid rgba(16,185,129,.2);">
+          <div style="font-size:11px;font-weight:700;color:#059669;font-family:var(--font-vi);">Cashback Real-time</div>
+          <div style="font-size:11px;color:var(--text-mid);margin-top:3px;font-family:var(--font-vi);">Hoàn tiền ngay khi giao dịch hoàn tất — không chờ chu kỳ tháng</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION 05 ══ -->
+<div id="s5" class="sec-div">
+  <div class="sec-div-bg"></div><div class="sec-num-bg">05</div>
+  <div class="sec-inner">
+    <div class="sec-tag">Section 05</div>
+    <div class="sec-title">Lộ trình Triển khai</div>
+    <div class="sec-desc">3 Giai đoạn · 24 Tháng · Go/No-Go rõ ràng</div>
+  </div>
+</div>
+
+<!-- Gantt + Kanban -->
+<section id="s5-main" class="slide" style="background:var(--white);">
+  <div class="sh"><div class="sh-tag">Lộ trình</div><h2 class="sh-title">Gantt Chart — <em>24 tháng triển khai</em></h2><div class="sh-line"></div><p class="sh-desc">Cơ chế Go/No-Go tại cuối mỗi giai đoạn. Ngân sách MVP chỉ giải ngân sau khi POC được thông qua.</p></div>
+  <!-- Gantt Chart visual -->
+  <div class="gantt-wrap" style="margin-bottom:24px;">
+    <div class="gantt-title">Timeline 24 tháng — 3 giai đoạn</div>
+    <!-- Month headers -->
+    <div style="display:grid;grid-template-columns:160px repeat(24,1fr);gap:2px;margin-bottom:8px;">
+      <div></div>
+      <div class="gantt-month">T1</div><div class="gantt-month">T2</div><div class="gantt-month">T3</div>
+      <div class="gantt-month">T4</div><div class="gantt-month">T5</div><div class="gantt-month">T6</div>
+      <div class="gantt-month">T7</div><div class="gantt-month">T8</div><div class="gantt-month">T9</div>
+      <div class="gantt-month">T10</div><div class="gantt-month">T11</div><div class="gantt-month">T12</div>
+      <div class="gantt-month">T13</div><div class="gantt-month">T14</div><div class="gantt-month">T15</div>
+      <div class="gantt-month">T16</div><div class="gantt-month">T17</div><div class="gantt-month">T18</div>
+      <div class="gantt-month">T19</div><div class="gantt-month">T20</div><div class="gantt-month">T21</div>
+      <div class="gantt-month">T22</div><div class="gantt-month">T23</div><div class="gantt-month">T24</div>
+    </div>
+    <!-- Phase bands -->
+    <div style="display:grid;grid-template-columns:160px repeat(24,1fr);gap:2px;margin-bottom:6px;align-items:center;">
+      <div style="font-size:10px;font-weight:700;color:var(--teal);font-family:var(--font-vi);">GĐ1: POC</div>
+      <div style="grid-column:2/5;background:rgba(0,180,216,.15);border-radius:4px;height:16px;display:flex;align-items:center;padding-left:8px;"><span style="font-size:10px;color:var(--teal);font-weight:700;font-family:var(--font-vi);">POC</span></div>
+      <div style="grid-column:5/14;background:transparent;"></div>
+      <div style="grid-column:14/26;background:transparent;"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:160px repeat(24,1fr);gap:2px;margin-bottom:6px;align-items:center;">
+      <div style="font-size:10px;font-weight:700;color:var(--blue-light);font-family:var(--font-vi);">GĐ2: MVP</div>
+      <div style="grid-column:5/14;background:rgba(33,150,243,.15);border-radius:4px;height:16px;display:flex;align-items:center;padding-left:8px;"><span style="font-size:10px;color:var(--blue-light);font-weight:700;font-family:var(--font-vi);">MVP</span></div>
+    </div>
+    <div style="display:grid;grid-template-columns:160px repeat(24,1fr);gap:2px;margin-bottom:14px;align-items:center;">
+      <div style="font-size:10px;font-weight:700;color:var(--gold);font-family:var(--font-vi);">GĐ3: GTM</div>
+      <div style="grid-column:14/26;background:rgba(245,158,11,.15);border-radius:4px;height:16px;display:flex;align-items:center;padding-left:8px;"><span style="font-size:10px;color:var(--gold);font-weight:700;font-family:var(--font-vi);">GTM & Go-Live Toàn quốc</span></div>
+    </div>
+    <!-- Milestone rows -->
+    <div id="gantt-rows"></div>
+    <!-- Milestone markers -->
+    <div style="display:grid;grid-template-columns:160px repeat(24,1fr);gap:2px;margin-top:10px;align-items:center;">
+      <div style="font-size:10px;color:var(--text-light);font-family:var(--font-vi);">Milestones</div>
+      <div style="grid-column:4;text-align:center;"><span style="font-size:11px;color:var(--teal);" title="Go/No-Go POC">🚦</span></div>
+      <div style="grid-column:5;text-align:center;"><span style="font-size:11px;color:var(--blue-light);" title="MVP Start">▶</span></div>
+      <div style="grid-column:9;text-align:center;"><span style="font-size:11px;color:var(--blue-light);" title="Lending Live">⚡</span></div>
+      <div style="grid-column:13;text-align:center;"><span style="font-size:11px;color:var(--blue-light);" title="Go/No-Go MVP">🚦</span></div>
+      <div style="grid-column:14;text-align:center;"><span style="font-size:11px;color:var(--gold);" title="GTM Start">🚀</span></div>
+      <div style="grid-column:21;text-align:center;"><span style="font-size:11px;color:var(--gold);" title="Multi-industry">🌐</span></div>
+      <div style="grid-column:25;text-align:center;"><span style="font-size:11px;color:var(--gold);" title="Phase 2 Prep">🏁</span></div>
+    </div>
+    <div style="display:flex;gap:16px;margin-top:12px;flex-wrap:wrap;">
+      <span style="font-size:11px;color:var(--text-light);font-family:var(--font-vi);">🚦 Go/No-Go</span>
+      <span style="font-size:11px;color:var(--text-light);font-family:var(--font-vi);">▶ Khởi động giai đoạn</span>
+      <span style="font-size:11px;color:var(--text-light);font-family:var(--font-vi);">⚡ Module critical</span>
+      <span style="font-size:11px;color:var(--text-light);font-family:var(--font-vi);">🚀 Go-Live quốc gia</span>
+      <span style="font-size:11px;color:var(--text-light);font-family:var(--font-vi);">🏁 Phase 2 Prep</span>
+    </div>
+  </div>
+
+  <!-- Phase overview cards -->
+  <div class="g3" style="gap:16px;">
+    <div class="card" style="border-top:3px solid var(--teal);">
+      <div style="font-size:10px;font-weight:700;color:var(--teal);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;font-family:var(--font-vi);">Giai đoạn 01 · T1–T3</div>
+      <div style="font-family:var(--font-head);font-size:26px;font-weight:700;color:var(--navy);">POC</div>
+      <div style="font-family:var(--font-head);font-size:28px;font-weight:700;color:var(--navy);margin:6px 0;">$300K <span style="font-size:14px;color:var(--text-light);">· 6%</span></div>
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--text-mid);font-family:var(--font-vi);">
+        <div>• 1,000 users thử nghiệm</div>
+        <div>• 1 ngân hàng + 2–3 POS</div>
+        <div>• M1: Hạ tầng & Thiết kế</div>
+        <div>• M2: Prototype cốt lõi</div>
+        <div>• M3: Pilot & Go/No-Go</div>
+      </div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--blue-light);">
+      <div style="font-size:10px;font-weight:700;color:var(--blue-light);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;font-family:var(--font-vi);">Giai đoạn 02 · T4–T12</div>
+      <div style="font-family:var(--font-head);font-size:26px;font-weight:700;color:var(--navy);">MVP</div>
+      <div style="font-family:var(--font-head);font-size:28px;font-weight:700;color:var(--navy);margin:6px 0;">$2.2M <span style="font-size:14px;color:var(--text-light);">· 44%</span></div>
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--text-mid);font-family:var(--font-vi);">
+        <div>• 500,000 active users</div>
+        <div>• 100–200 merchant</div>
+        <div>• M4: Payment Module</div>
+        <div>• M5: Loyalty Engine</div>
+        <div>• M6: Lending Module</div>
+        <div>• M7: Pilot & UAT</div>
+      </div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--gold);">
+      <div style="font-size:10px;font-weight:700;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;font-family:var(--font-vi);">Giai đoạn 03 · T13–T24</div>
+      <div style="font-family:var(--font-head);font-size:26px;font-weight:700;color:var(--navy);">GTM</div>
+      <div style="font-family:var(--font-head);font-size:28px;font-weight:700;color:var(--navy);margin:6px 0;">$2.5M <span style="font-size:14px;color:var(--text-light);">· 50%</span></div>
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--text-mid);font-family:var(--font-vi);">
+        <div>• 10–20 triệu users</div>
+        <div>• 5,000+ merchant</div>
+        <div>• M8: National Rollout</div>
+        <div>• M9: Multi-industry</div>
+        <div>• M10: Hardening</div>
+        <div>• M11: Phase 2 Prep</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Kanban milestones -->
+<section class="slide" style="background:var(--bg);">
+  <div class="sh"><div class="sh-tag">Milestone Details</div><h2 class="sh-title">Kanban <em>Milestones</em> theo giai đoạn</h2><div class="sh-line"></div></div>
+  <div class="kanban">
+    <div class="kb-col poc">
+      <div class="kb-col-title">● Giai đoạn 1 — POC (T1–T3)</div>
+      <div class="kb-card"><div class="kb-card-tag">M1 · Tháng 1</div><div class="kb-card-title">Hạ tầng & Thiết kế</div><div class="kb-card-desc">Kiến trúc kỹ thuật TAD · Hyperledger network test env · CI/CD pipeline</div><div class="kb-meta"><span>Hoàn thành: T1</span><span class="badge badge-cyan">$300K</span></div></div>
+      <div class="kb-card"><div class="kb-card-tag">M2 · Tháng 2</div><div class="kb-card-title">Prototype cốt lõi</div><div class="kb-card-desc">Chaincode Payment & Loyalty cơ bản · API Gateway · Mobile app prototype iOS+Android</div><div class="kb-meta"><span>Demo đối tác NH</span><span class="badge badge-cyan">End-to-end</span></div></div>
+      <div class="kb-card"><div class="kb-card-tag">M3 · Tháng 3</div><div class="kb-card-title">Pilot & Go/No-Go</div><div class="kb-card-desc">Pilot 1,000 users · Báo cáo kỹ thuật · Security assessment · Quyết định Go/No-Go sang MVP</div><div class="kb-meta"><span>NPS &gt;50</span><span class="badge badge-green">✓ &gt;95% success</span></div></div>
+    </div>
+    <div class="kb-col mvp">
+      <div class="kb-col-title">● Giai đoạn 2 — MVP (T4–T12)</div>
+      <div class="kb-card"><div class="kb-card-tag">M4 · T4–T5</div><div class="kb-card-title">Payment Module</div><div class="kb-card-desc">Payment service production-ready · QR/NFC · Ngân hàng API live · Reconciliation tự động</div><div class="kb-meta"><span>0 lỗi / 10K TXN</span><span class="badge badge-blue">Latency &lt;3s P95</span></div></div>
+      <div class="kb-card"><div class="kb-card-tag">M5 · T6–T7</div><div class="kb-card-title">Loyalty Engine</div><div class="kb-card-desc">Loyalty chaincode · Universal Points · Targeted promotion engine · NFT Voucher module</div><div class="kb-meta"><span>100% chính xác</span><span class="badge badge-blue">Auto campaign</span></div></div>
+      <div class="kb-card"><div class="kb-card-tag">M6 · T8</div><div class="kb-card-title">Lending Module</div><div class="kb-card-desc">Credit scoring model v1 · Unsecured Lending flow · Auto-approval engine · Ngân hàng lending API</div><div class="kb-meta"><span>&gt;60% auto approve</span><span class="badge badge-blue">&lt;5 phút</span></div></div>
+      <div class="kb-card"><div class="kb-card-tag">M7 · T9–T12</div><div class="kb-card-title">Pilot & UAT</div><div class="kb-card-desc">100–200 merchants · 500K users · UAT report · Performance audit · Security audit</div><div class="kb-meta"><span>NPS &gt;60</span><span class="badge badge-green">0 critical bug</span></div></div>
+    </div>
+    <div class="kb-col gtm">
+      <div class="kb-col-title">● Giai đoạn 3 — GTM (T13–T24)</div>
+      <div class="kb-card"><div class="kb-card-tag">M8 · T13–T16</div><div class="kb-card-title">National Rollout</div><div class="kb-card-desc">Mở rộng toàn quốc · 5,000+ merchants · Multi-bank integration · Marketing campaign</div><div class="kb-meta"><span>T13–T16</span><span class="badge badge-gold">10–20M users</span></div></div>
+      <div class="kb-card"><div class="kb-card-tag">M9 · T17–T20</div><div class="kb-card-title">Multi-industry</div><div class="kb-card-desc">Hàng không (miles) · Giải trí (event tickets) · Giáo dục (học phí) · Universal Loyalty cross-industry</div><div class="kb-meta"><span>T17–T20</span><span class="badge badge-gold">5 ngành</span></div></div>
+      <div class="kb-card"><div class="kb-card-tag">M10 · T21–T22</div><div class="kb-card-title">Platform Hardening</div><div class="kb-card-desc">Performance optimization · Feedback cycles · SLA monitoring dashboard · Hotfix</div><div class="kb-meta"><span>T21–T22</span><span class="badge badge-gold">SLA 99.9%</span></div></div>
+      <div class="kb-card"><div class="kb-card-tag">M11 · T23–T24</div><div class="kb-card-title">Phase 2 Prep</div><div class="kb-card-desc">Đánh giá toàn diện Phase 1 · Báo cáo tính khả thi Phase 2 · Lộ trình bảo hiểm, chứng khoán</div><div class="kb-meta"><span>T23–T24</span><span class="badge badge-gold">Phase 2 ready</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION 06 ══ -->
+<div id="s6" class="sec-div">
+  <div class="sec-div-bg"></div><div class="sec-num-bg">06</div>
+  <div class="sec-inner">
+    <div class="sec-tag">Section 06</div>
+    <div class="sec-title">Kế hoạch Ngân sách & ROI</div>
+    <div class="sec-desc">$5M · 24 tháng · Break-even Năm 2–3</div>
+  </div>
+</div>
+
+<!-- Budget + ROI Charts -->
+<section class="slide" style="background:var(--white);">
+  <div class="sh"><div class="sh-tag">Ngân sách & ROI</div><h2 class="sh-title">Phân bổ <em>$5,000,000 USD</em> & Dự báo ROI</h2><div class="sh-line"></div></div>
+  <div class="g2" style="gap:28px;margin-bottom:24px;">
+    <!-- Budget donut chart -->
+    <div class="chart-wrap">
+      <div class="chart-title">Phân bổ theo hạng mục</div>
+      <canvas id="budgetChart" height="200"></canvas>
+    </div>
+    <!-- Phase budget bar -->
+    <div class="chart-wrap">
+      <div class="chart-title">Phân bổ theo giai đoạn</div>
+      <canvas id="phaseChart" height="200"></canvas>
+    </div>
+  </div>
+  <!-- ROI chart -->
+  <div class="chart-wrap">
+    <div class="chart-title">Dự báo ROI — 3 năm (ước tính thận trọng, chỉ tính phí giao dịch 0.1% và Lending spread 2%)</div>
+    <canvas id="roiChart" height="140"></canvas>
+  </div>
+  <div class="note">Kỳ vọng hoàn vốn: cuối Năm 2 / đầu Năm 3. Thực tế có thể cao hơn khi tính thêm phí platform merchant, data analytics service, và white-label licensing.</div>
+</section>
+
+<!-- ══ SECTION 07 ══ -->
+<div id="s7" class="sec-div">
+  <div class="sec-div-bg"></div><div class="sec-num-bg">07</div>
+  <div class="sec-inner">
+    <div class="sec-tag">Section 07</div>
+    <div class="sec-title">Đội ngũ, Quản trị & Vận hành</div>
+    <div class="sec-desc">42 thành viên · Agile + PMO · Ma trận RACI</div>
+  </div>
+</div>
+
+<!-- Team -->
+<section class="slide" style="background:var(--white);">
+  <div class="sh"><div class="sh-tag">7.1 — Đội ngũ</div><h2 class="sh-title">Cấu trúc <em>42 thành viên</em></h2><div class="sh-line"></div></div>
+  <div class="g2" style="gap:28px;align-items:start;">
+    <table class="tbl">
+      <thead><tr><th>Vị trí</th><th style="text-align:center;">SL</th><th>Giai đoạn</th></tr></thead>
+      <tbody>
+        <tr><td>Blockchain Architects</td><td style="text-align:center;"><span class="team-count">2</span></td><td><span class="badge badge-cyan">POC</span></td></tr>
+        <tr><td>Blockchain Developers</td><td style="text-align:center;"><span class="team-count">6</span></td><td><span class="badge badge-cyan">POC</span></td></tr>
+        <tr><td>Backend Developers</td><td style="text-align:center;"><span class="team-count">6</span></td><td><span class="badge badge-cyan">POC</span></td></tr>
+        <tr><td>Mobile Developers</td><td style="text-align:center;"><span class="team-count">6</span></td><td><span class="badge badge-blue">POC→MVP</span></td></tr>
+        <tr><td>DevOps / SRE Engineers</td><td style="text-align:center;"><span class="team-count">4</span></td><td><span class="badge badge-cyan">POC</span></td></tr>
+        <tr><td>QA Engineers</td><td style="text-align:center;"><span class="team-count">4</span></td><td><span class="badge badge-blue">MVP+</span></td></tr>
+        <tr><td>Data / ML Engineers</td><td style="text-align:center;"><span class="team-count">3</span></td><td><span class="badge badge-blue">MVP (Lending)</span></td></tr>
+        <tr><td>UI/UX Designers</td><td style="text-align:center;"><span class="team-count">3</span></td><td><span class="badge badge-blue">POC→MVP</span></td></tr>
+        <tr><td>Business Analysts</td><td style="text-align:center;"><span class="team-count">3</span></td><td><span class="badge badge-cyan">POC</span></td></tr>
+        <tr><td>Project Director</td><td style="text-align:center;"><span class="team-count">1</span></td><td><span class="badge badge-cyan">POC</span></td></tr>
+        <tr><td>Project Manager</td><td style="text-align:center;"><span class="team-count">1</span></td><td><span class="badge badge-cyan">POC</span></td></tr>
+        <tr><td>Security Officer</td><td style="text-align:center;"><span class="team-count">1</span></td><td><span class="badge badge-cyan">POC</span></td></tr>
+        <tr><td>Legal / Compliance (PT)</td><td style="text-align:center;"><span class="team-count">1</span></td><td><span class="badge badge-cyan">POC</span></td></tr>
+      </tbody>
+    </table>
+    <div>
+      <!-- Org chart -->
+      <div class="chart-wrap" style="margin-bottom:16px;">
+        <div class="chart-title">Cấu trúc tổ chức — 3 Agile Squads</div>
+        <div style="display:flex;flex-direction:column;gap:0;align-items:center;">
+          <div style="padding:10px 20px;background:var(--navy);border-radius:8px;color:var(--cyan);font-weight:700;font-size:12px;text-align:center;width:220px;font-family:var(--font-vi);">STEERING COMMITTEE</div>
+          <div style="width:2px;height:16px;background:rgba(0,180,216,.3);"></div>
+          <div style="padding:10px 20px;background:rgba(13,71,161,.1);border-radius:8px;color:#1565C0;font-weight:700;font-size:12px;text-align:center;border:1px solid rgba(13,71,161,.2);width:220px;font-family:var(--font-vi);">PMO DIRECTOR</div>
+          <div style="width:2px;height:14px;background:rgba(0,180,216,.3);"></div>
+          <div style="display:flex;gap:10px;width:100%;">
+            <div style="flex:1;padding:10px;background:rgba(0,150,199,.08);border-radius:8px;text-align:center;border:1px solid rgba(0,150,199,.15);">
+              <div style="font-size:11px;font-weight:700;color:var(--teal);font-family:var(--font-vi);">PAYMENT</div>
+              <div style="font-size:10px;color:var(--text-light);margin-top:2px;font-family:var(--font-vi);">PO + Tech Lead + Dev</div>
+            </div>
+            <div style="flex:1;padding:10px;background:rgba(245,158,11,.08);border-radius:8px;text-align:center;border:1px solid rgba(245,158,11,.15);">
+              <div style="font-size:11px;font-weight:700;color:#B45309;font-family:var(--font-vi);">LOYALTY</div>
+              <div style="font-size:10px;color:var(--text-light);margin-top:2px;font-family:var(--font-vi);">PO + Tech Lead + Dev</div>
+            </div>
+            <div style="flex:1;padding:10px;background:rgba(16,185,129,.08);border-radius:8px;text-align:center;border:1px solid rgba(16,185,129,.15);">
+              <div style="font-size:11px;font-weight:700;color:#059669;font-family:var(--font-vi);">LENDING</div>
+              <div style="font-size:10px;color:var(--text-light);margin-top:2px;font-family:var(--font-vi);">PO + Tech Lead + Dev</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Escalation -->
+      <div style="background:var(--bg);border-radius:var(--r);padding:16px 20px;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-light);margin-bottom:10px;font-family:var(--font-vi);">Escalation Process</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <div style="display:flex;justify-content:space-between;padding:8px 12px;background:rgba(0,180,216,.06);border-radius:6px;font-size:12px;font-family:var(--font-vi);"><span>Issue xảy ra</span><strong style="color:var(--teal);">Squad Lead → 24h</strong></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 12px;background:rgba(0,180,216,.06);border-radius:6px;font-size:12px;font-family:var(--font-vi);"><span>Chưa giải quyết</span><strong style="color:var(--blue);">PMO Director → 48h</strong></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 12px;background:rgba(0,180,216,.06);border-radius:6px;font-size:12px;font-family:var(--font-vi);"><span>Ảnh hưởng timeline</span><strong style="color:var(--navy);">Steering Committee → 72h</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RACI -->
+<section class="slide" style="background:var(--bg);">
+  <div class="sh"><div class="sh-tag">7.3 — Quản trị</div><h2 class="sh-title">Ma trận <em>RACI</em></h2><div class="sh-line"></div></div>
+  <table class="tbl tbl-center">
+    <thead><tr><th style="text-align:left;">Hoạt động</th><th>Steering</th><th>PMO Dir.</th><th>Tech Lead</th><th>Squad</th><th>Dev Team</th></tr></thead>
+    <tbody>
+      <tr><td>Phê duyệt ngân sách</td><td><span class="raci-a">A/R</span></td><td><span class="raci-c">C</span></td><td><span class="raci-i">I</span></td><td><span class="raci-i">I</span></td><td><span class="raci-i">I</span></td></tr>
+      <tr><td>Quyết định Go/No-Go</td><td><span class="raci-a">A/R</span></td><td><span class="raci-r">R</span></td><td><span class="raci-c">C</span></td><td><span class="raci-c">C</span></td><td><span class="raci-i">I</span></td></tr>
+      <tr><td>Thiết kế kiến trúc kỹ thuật</td><td><span class="raci-i">I</span></td><td><span class="raci-i">I</span></td><td><span class="raci-a">A/R</span></td><td><span class="raci-r">R</span></td><td><span class="raci-c">C</span></td></tr>
+      <tr><td>Phát triển tính năng</td><td><span class="raci-i">I</span></td><td><span class="raci-i">I</span></td><td><span class="raci-c">C</span></td><td><span class="raci-a">A</span></td><td><span class="raci-r">R</span></td></tr>
+      <tr><td>Quản lý rủi ro</td><td><span class="raci-i">I</span></td><td><span class="raci-a">A/R</span></td><td><span class="raci-r">R</span></td><td><span class="raci-r">R</span></td><td><span class="raci-c">C</span></td></tr>
+      <tr><td>Quan hệ đối tác (NH/Merchant)</td><td><span class="raci-c">C</span></td><td><span class="raci-a">A/R</span></td><td><span class="raci-c">C</span></td><td><span class="raci-i">I</span></td><td><span class="raci-i">I</span></td></tr>
+      <tr><td>Báo cáo tiến độ</td><td><span class="raci-i">I</span></td><td><span class="raci-r">R</span></td><td><span class="raci-c">C</span></td><td><span class="raci-c">C</span></td><td><span class="raci-i">I</span></td></tr>
+      <tr><td>Security & Compliance</td><td><span class="raci-i">I</span></td><td><span class="raci-a">A</span></td><td><span class="raci-r">R</span></td><td><span class="raci-c">C</span></td><td><span class="raci-r">R</span></td></tr>
+    </tbody>
+  </table>
+  <div style="display:flex;gap:16px;margin-top:12px;flex-wrap:wrap;">
+    <span style="font-size:12px;font-family:var(--font-vi);"><span class="raci-r">R</span> Thực hiện</span>
+    <span style="font-size:12px;font-family:var(--font-vi);"><span class="raci-a">A</span> Chịu trách nhiệm cuối</span>
+    <span style="font-size:12px;font-family:var(--font-vi);"><span class="raci-c">C</span> Tham vấn</span>
+    <span style="font-size:12px;font-family:var(--font-vi);"><span class="raci-i">I</span> Được thông báo</span>
+  </div>
+</section>
+
+<!-- ══ SECTION 08 ══ -->
+<div id="s8" class="sec-div">
+  <div class="sec-div-bg"></div><div class="sec-num-bg">08</div>
+  <div class="sec-inner">
+    <div class="sec-tag">Section 08</div>
+    <div class="sec-title">Phân tích Cạnh tranh & Lợi thế chiến lược</div>
+    <div class="sec-desc">BFC vs. LynkiD/CAEX · vs. 1Matrix · SWOT</div>
+  </div>
+</div>
+
+<!-- Competitive analysis -->
+<section class="slide" style="background:var(--white);">
+  <div class="sh"><div class="sh-tag">8.1 — So sánh</div><h2 class="sh-title">BFC vs. <em>Đối thủ cạnh tranh</em></h2><div class="sh-line"></div><p class="sh-desc">Phân tích dựa trên thông tin công khai đến tháng 3/2026.</p></div>
+  <table class="tbl">
+    <thead>
+      <tr>
+        <th>Tiêu chí</th>
+        <th>LynkiD / CAEX (VPBank)</th>
+        <th>1Matrix (Techcombank–Masan)</th>
+        <th style="color:var(--gold);">★ BFC (Sovico)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Blockchain</td><td>AI + Open Loyalty; CAEX: Crypto Exchange</td><td>Tự xây "Make in Vietnam"</td><td style="background:rgba(245,158,11,.04);font-weight:600;">Hyperledger Fabric — kiểm chứng quốc tế</td></tr>
+      <tr><td>Người dùng</td><td>9 triệu+ (LynkiD)</td><td>Chưa công bố (mới 2025)</td><td style="background:rgba(245,158,11,.04);">0 — greenfield, thiết kế từ đầu</td></tr>
+      <tr><td>Phạm vi Loyalty</td><td>Open — 1,000+ thương hiệu</td><td>Đóng — Techcombank/Masan</td><td style="background:rgba(245,158,11,.04);font-weight:600;">Đa ngành: Bán lẻ, Hàng không, Nghỉ dưỡng, GD</td></tr>
+      <tr><td>Unsecured Lending</td><td><span class="check-n">✗ Không có</span></td><td><span class="check-n">✗ Không công bố</span></td><td style="background:rgba(245,158,11,.04);"><span class="badge badge-gold">★ Credit on-chain &lt;5 phút</span></td></tr>
+      <tr><td>NFT Voucher</td><td><span class="check-n">✗</span></td><td><span class="check-n">✗</span></td><td style="background:rgba(245,158,11,.04);"><span class="badge badge-gold">★ Chống sao chép, on-chain</span></td></tr>
+      <tr><td>Hỗ trợ vốn</td><td>VPBank Top 5</td><td>~14,000 tỷ VND Techcombank</td><td style="background:rgba(245,158,11,.04);">Sovico — HDBank, Vietjet, Furama, Menas</td></tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top:24px;">
+    <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-light);margin-bottom:14px;font-family:var(--font-vi);">Định vị chiến lược — Radar so sánh</div>
+    <div class="g3" style="gap:16px;">
+      <div style="background:rgba(0,150,199,.06);border-radius:var(--r);padding:18px;border:1px solid rgba(0,150,199,.15);">
+        <div style="font-size:12px;font-weight:700;color:var(--teal);margin-bottom:10px;font-family:var(--font-vi);">LynkiD / CAEX</div>
+        <div style="margin-bottom:6px;"><span class="badge badge-green">✅ Mạnh</span></div>
+        <div style="font-size:11px;color:var(--text-mid);margin-bottom:6px;font-family:var(--font-vi);">• 9M users — network effect vượt trội<br>• 1,000+ thương hiệu đối tác<br>• Top 10 Blockchain VINASA 2025</div>
+        <div style="margin-bottom:4px;"><span class="badge badge-red">⚠ Yếu</span></div>
+        <div style="font-size:11px;color:var(--text-mid);font-family:var(--font-vi);">• Không có Unsecured Lending<br>• Phụ thuộc VPBank — khó mở rộng</div>
+      </div>
+      <div style="background:rgba(33,150,243,.06);border-radius:var(--r);padding:18px;border:1px solid rgba(33,150,243,.15);">
+        <div style="font-size:12px;font-weight:700;color:var(--blue-light);margin-bottom:10px;font-family:var(--font-vi);">1Matrix (Techcombank–Masan)</div>
+        <div style="margin-bottom:6px;"><span class="badge badge-green">✅ Mạnh</span></div>
+        <div style="font-size:11px;color:var(--text-mid);margin-bottom:6px;font-family:var(--font-vi);">• Được Tổng Bí thư giao nhiệm vụ<br>• ~14,000 tỷ VND hậu thuẫn<br>• WinMart tệp khách hàng lớn</div>
+        <div style="margin-bottom:4px;"><span class="badge badge-red">⚠ Yếu</span></div>
+        <div style="font-size:11px;color:var(--text-mid);font-family:var(--font-vi);">• Mới ra mắt 3/2025 — chưa kiểm chứng<br>• Blockchain tự xây rủi ro kỹ thuật cao</div>
+      </div>
+      <div style="background:rgba(245,158,11,.06);border-radius:var(--r);padding:18px;border:1px solid rgba(245,158,11,.2);">
+        <div style="font-size:12px;font-weight:700;color:var(--gold);margin-bottom:10px;font-family:var(--font-vi);">★ BFC — Sovico</div>
+        <div style="margin-bottom:6px;"><span class="badge badge-gold">★ Lợi thế độc quyền</span></div>
+        <div style="font-size:11px;color:var(--text-mid);margin-bottom:6px;font-family:var(--font-vi);">• Dữ liệu đa chiều: bay + resort + bán lẻ + NH<br>• Unsecured Lending — chưa đối thủ nào có<br>• Hyperledger Fabric kiểm chứng quốc tế</div>
+        <div style="margin-bottom:4px;"><span class="badge badge-gray">Cần chú ý</span></div>
+        <div style="font-size:11px;color:var(--text-mid);font-family:var(--font-vi);">• Greenfield — cần đầu tư user acquisition<br>• Thương hiệu chưa được biết đến</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SWOT -->
+<section class="slide" style="background:var(--bg);">
+  <div class="sh"><div class="sh-tag">8.3 — SWOT</div><h2 class="sh-title">Phân tích <em>SWOT</em> — BFC</h2><div class="sh-line"></div></div>
+  <div class="swot">
+    <div class="swot-cell S">
+      <div class="swot-l">S</div>
+      <div class="swot-title">Strengths — Điểm mạnh</div>
+      <ul class="swot-list">
+        <li>Hệ sinh thái đa ngành sẵn có: Banking + Aviation + Resort + Retail trong cùng 1 tập đoàn</li>
+        <li>Dữ liệu giao dịch đa chiều: bay + nghỉ dưỡng + bán lẻ + ngân hàng → Credit Scoring chính xác hơn đối thủ</li>
+        <li>Hyperledger Fabric — công nghệ kiểm chứng bởi hàng chục ngân hàng quốc tế</li>
+        <li>Unsecured Lending on-chain — tính năng độc đáo chưa đối thủ nào triển khai tại Việt Nam</li>
+        <li>NFT Voucher — chống gian lận, hết hạn tự động, không thể sao chép</li>
+      </ul>
+    </div>
+    <div class="swot-cell W">
+      <div class="swot-l">W</div>
+      <div class="swot-title">Weaknesses — Điểm yếu</div>
+      <ul class="swot-list">
+        <li>Chưa có người dùng (greenfield) — cần đầu tư mạnh cho user acquisition</li>
+        <li>Thương hiệu BFC chưa được thị trường biết đến</li>
+        <li>Phụ thuộc vào tốc độ onboarding của các thành viên Sovico</li>
+        <li>Đội ngũ kỹ thuật blockchain cần tuyển dụng và xây dựng từ đầu</li>
+      </ul>
+    </div>
+    <div class="swot-cell O">
+      <div class="swot-l">O</div>
+      <div class="swot-title">Opportunities — Cơ hội</div>
+      <ul class="swot-list">
+        <li>Thị trường loyalty Việt Nam tăng 15.7% CAGR đến 2029, đạt 971 triệu USD</li>
+        <li>NHNN mở Fintech Sandbox — cơ hội triển khai Lending hợp pháp trước đối thủ</li>
+        <li>Sovico mở rộng sang năng lượng xanh, giáo dục — thêm điểm chạm loyalty tương lai</li>
+        <li>e-VND (CBDC) tiềm năng — BFC có thể là hạ tầng tích hợp khi NHNN ra mắt</li>
+      </ul>
+    </div>
+    <div class="swot-cell T">
+      <div class="swot-l">T</div>
+      <div class="swot-title">Threats — Thách thức</div>
+      <ul class="swot-list">
+        <li>LynkiD đã có 9M users — lợi thế mạng lưới rất khó thu hẹp trong ngắn hạn</li>
+        <li>1Matrix được nhà nước hậu thuẫn — có thể trở thành chuẩn quốc gia</li>
+        <li>Thay đổi pháp lý NHNN về Fintech/Lending có thể làm chậm triển khai</li>
+        <li>Techcombank/Masan có nguồn lực tài chính vượt trội</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION 09 ══ -->
+<div id="s9" class="sec-div">
+  <div class="sec-div-bg"></div><div class="sec-num-bg">09</div>
+  <div class="sec-inner">
+    <div class="sec-tag">Section 09</div>
+    <div class="sec-title">Phân tích Rủi ro & Giảm thiểu</div>
+    <div class="sec-desc">Ma trận rủi ro · Kế hoạch ứng phó</div>
+  </div>
+</div>
+
+<!-- Risk Matrix -->
+<section class="slide" style="background:var(--white);">
+  <div class="sh"><div class="sh-tag">Rủi ro</div><h2 class="sh-title">Ma trận <em>Rủi ro & Ứng phó</em></h2><div class="sh-line"></div></div>
+  <div class="g2" style="gap:28px;align-items:start;">
+    <table class="tbl">
+      <thead><tr><th>Rủi ro</th><th style="text-align:center;">XS</th><th style="text-align:center;">AH</th><th style="text-align:center;">Mức</th></tr></thead>
+      <tbody>
+        <tr><td>Hyperledger Fabric không đạt TPS</td><td style="text-align:center;"><span class="risk-l">Thấp</span></td><td style="text-align:center;"><span class="risk-h">Cao</span></td><td style="text-align:center;"><span class="risk-m">TB</span></td></tr>
+        <tr><td>NHNN thay đổi quy định Fintech</td><td style="text-align:center;"><span class="risk-m">TB</span></td><td style="text-align:center;"><span class="risk-h">Cao</span></td><td style="text-align:center;"><span class="risk-h">Cao</span></td></tr>
+        <tr><td>Tấn công Smart Contract / Node</td><td style="text-align:center;"><span class="risk-m">TB</span></td><td style="text-align:center;"><span class="risk-h" style="background:rgba(185,28,28,.1);color:#7F1D1D;">Rất cao</span></td><td style="text-align:center;"><span class="risk-h">Cao</span></td></tr>
+        <tr><td>Thiếu Hyperledger developer</td><td style="text-align:center;"><span class="risk-h">Cao</span></td><td style="text-align:center;"><span class="risk-m">TB</span></td><td style="text-align:center;"><span class="risk-h">Cao</span></td></tr>
+        <tr><td>Ngân hàng chậm tích hợp API</td><td style="text-align:center;"><span class="risk-m">TB</span></td><td style="text-align:center;"><span class="risk-h">Cao</span></td><td style="text-align:center;"><span class="risk-h">Cao</span></td></tr>
+        <tr><td>Người dùng không adopt</td><td style="text-align:center;"><span class="risk-m">TB</span></td><td style="text-align:center;"><span class="risk-m">TB</span></td><td style="text-align:center;"><span class="risk-m">TB</span></td></tr>
+        <tr><td>Downtime ảnh hưởng giao dịch</td><td style="text-align:center;"><span class="risk-l">Thấp</span></td><td style="text-align:center;"><span class="risk-h">Cao</span></td><td style="text-align:center;"><span class="risk-m">TB</span></td></tr>
+      </tbody>
+    </table>
+    <!-- Risk heat map -->
+    <div class="chart-wrap">
+      <div class="chart-title">Risk Heatmap — Xác suất × Mức độ ảnh hưởng</div>
+      <canvas id="riskChart" height="240"></canvas>
+    </div>
+  </div>
+  <div style="margin-top:20px;">
+    <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-light);margin-bottom:12px;font-family:var(--font-vi);">Kế hoạch giảm thiểu — Top rủi ro cao</div>
+    <div class="g2" style="gap:12px;">
+      <div class="callout"><strong>Rủi ro pháp lý NHNN:</strong> Tư vấn pháp lý từ POC · Thiết kế tuân thủ-ready · Theo dõi chính sách liên tục · Tham gia Fintech Sandbox sớm</div>
+      <div class="callout"><strong>Rủi ro bảo mật:</strong> Audit bảo mật định kỳ · Penetration testing mỗi quý · Bug bounty program · Multi-region deployment SLA &gt;99.9%</div>
+      <div class="callout"><strong>Rủi ro nhân sự Blockchain:</strong> Lên kế hoạch tuyển dụng từ POC · Đào tạo nội bộ · Hợp tác đơn vị có kinh nghiệm Fabric · Budget đào tạo trong kế hoạch</div>
+      <div class="callout"><strong>Rủi ro tích hợp Ngân hàng:</strong> Sandbox integration từ POC · SLA rõ ràng trong MOU · Có phương án mock bank API để không chặn tiến độ phát triển</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION 10 ══ -->
+<div id="s10" class="sec-div">
+  <div class="sec-div-bg"></div><div class="sec-num-bg">10</div>
+  <div class="sec-inner">
+    <div class="sec-tag">Section 10</div>
+    <div class="sec-title">Lưu ý PMO — Quyết định cần xác lập ngay</div>
+    <div class="sec-desc">6 điểm hành động · Trước khi khởi động Giai đoạn 1</div>
+  </div>
+</div>
+
+<!-- PMO -->
+<section class="slide" style="background:var(--bg);">
+  <div class="sh"><div class="sh-tag">PMO Actions</div><h2 class="sh-title">6 Quyết định cần <em>xác lập ngay</em></h2><div class="sh-line"></div><p class="sh-desc">Để đảm bảo dự án khởi động đúng lộ trình, PMO cần phê duyệt các yếu tố sau trước khi bắt đầu Giai đoạn 1.</p></div>
+  <div class="g2" style="gap:12px;">
+    <div class="pmo-item"><div class="pmo-num">1</div><div class="pmo-content"><h4>Xác nhận lựa chọn blockchain</h4><p>Tổ chức workshop kỹ thuật với đại diện ngân hàng đối tác để xác nhận Hyperledger Fabric đáp ứng yêu cầu, hoặc đánh giá thêm R3 Corda.</p></div></div>
+    <div class="pmo-item"><div class="pmo-num">2</div><div class="pmo-content"><h4>Phê duyệt ngân sách theo giai đoạn</h4><p>Ngân sách POC ($300K) phê duyệt riêng biệt. Ngân sách MVP ($2.2M) chỉ giải ngân sau khi Go/No-Go POC được thông qua.</p></div></div>
+    <div class="pmo-item"><div class="pmo-num">3</div><div class="pmo-content"><h4>Thiết lập governance mạng blockchain</h4><p>Xác định Network Operator, quy trình nâng cấp chaincode, và cơ chế xử lý tranh chấp giữa các thành viên mạng (ngân hàng, merchant).</p></div></div>
+    <div class="pmo-item"><div class="pmo-num">4</div><div class="pmo-content"><h4>Ký kết MOU đối tác</h4><p>Ít nhất 1 ngân hàng và 2–3 merchant cần ký MOU trước khi POC bắt đầu để đảm bảo có môi trường thực tế để test.</p></div></div>
+    <div class="pmo-item"><div class="pmo-num">5</div><div class="pmo-content"><h4>Đánh giá DevOps capability</h4><p>Microservices + Kubernetes đòi hỏi hạ tầng DevOps trưởng thành. Đánh giá năng lực hiện tại và lập kế hoạch nâng cao nếu cần.</p></div></div>
+    <div class="pmo-item"><div class="pmo-num">6</div><div class="pmo-content"><h4>Tư vấn pháp lý Fintech</h4><p>Tham khảo ý kiến NHNN và tư vấn pháp lý về quy định lending online, bảo vệ dữ liệu người dùng và yêu cầu báo cáo tài chính trước khi thiết kế chi tiết module Lending.</p></div></div>
+  </div>
+</section>
+
+<!-- Closing -->
+<section id="closing" style="background:var(--navy);min-height:55vh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;overflow:hidden;">
+  <div class="grid-bg" style="opacity:.4;"></div>
+  <div style="position:absolute;width:600px;height:600px;top:50%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(0,180,216,.1) 0%,transparent 70%);pointer-events:none;"></div>
+  <div style="position:relative;z-index:2;max-width:680px;padding:48px;">
+    <div style="font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan);margin-bottom:18px;font-family:var(--font-vi);">BLOCKCHAIN FOR CONSUMER · SOVICO GROUP</div>
+    <div style="font-family:var(--font-vi);font-size:44px;font-weight:800;color:#fff;line-height:1.15;margin-bottom:20px;">Cảm ơn <span style="color:var(--cyan);">Ban lãnh đạo</span><br>đã xem xét</div>
+    <div style="font-size:15px;color:rgba(255,255,255,.45);line-height:1.75;margin-bottom:44px;font-family:var(--font-vi);">Tài liệu nội bộ - Mật</div>
+    <div style="display:flex;justify-content:center;gap:40px;flex-wrap:wrap;">
+      <div style="text-align:center;"><div style="font-size:10px;color:rgba(255,255,255,.3);letter-spacing:1px;text-transform:uppercase;font-family:var(--font-vi);">Tech Lead</div><div style="font-size:14px;color:#fff;font-weight:700;font-family:var(--font-vi);margin-top:4px;">Trần Hữu Nhân</div></div>
+      <div style="width:1px;background:rgba(255,255,255,.1);"></div>
+      <div style="text-align:center;"><div style="font-size:10px;color:rgba(255,255,255,.3);letter-spacing:1px;text-transform:uppercase;font-family:var(--font-vi);">Project Director</div><div style="font-size:14px;color:#fff;font-weight:700;font-family:var(--font-vi);margin-top:4px;">Nguyễn Văn Linh</div></div>
+      <div style="width:1px;background:rgba(255,255,255,.1);"></div>
+      <div style="text-align:center;"><div style="font-size:10px;color:rgba(255,255,255,.3);letter-spacing:1px;text-transform:uppercase;font-family:var(--font-vi);">Version</div><div style="font-size:14px;color:#fff;font-weight:700;font-family:var(--font-vi);margin-top:4px;">v2.0 · Tháng 3/2026</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-brand">BFC <span>·</span> Blockchain For Consumer</div>
+  <div class="foot-note">Tài liệu nội bộ - Mật · Galaxy Holdings · Sovico Group · v2.0 · 2026</div>
+  <div class="foot-meta">Hyperledger Fabric 2.x + Microservices<br>24 tháng · $5M · 42 thành viên</div>
+</footer>
+
+<script>
+// ── CHARTS ──
+window.addEventListener('load', () => {
+  Chart.defaults.font.family = "'Be Vietnam Pro', system-ui, sans-serif";
+  Chart.defaults.color = '#6B7280';
+
+  // Budget donut
+  new Chart(document.getElementById('budgetChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Phát triển phần mềm','Nhân sự vận hành','Hạ tầng & Cloud','Marketing & GTM','Dự phòng','Pháp lý & Tuân thủ'],
+      datasets: [{
+        data: [40,24,15,12,6,3],
+        backgroundColor: ['#1565C0','#00B4D8','#0096C7','#F59E0B','#94A3B8','#10B981'],
+        borderWidth: 2, borderColor: '#fff'
+      }]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:true,
+      plugins: {
+        legend: { position:'right', labels:{font:{size:11},padding:12,boxWidth:12} },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw}% ($${[2,1.2,.75,.6,.3,.15][ctx.dataIndex]}M)` } }
+      },
+      cutout: '60%'
+    }
+  });
+
+  // Phase bar
+  new Chart(document.getElementById('phaseChart'), {
+    type: 'bar',
+    data: {
+      labels: ['POC (3T)','MVP (9T)','GTM (12T)'],
+      datasets: [{
+        label: 'Ngân sách (USD)',
+        data: [300000, 2200000, 2500000],
+        backgroundColor: ['rgba(0,180,216,.7)','rgba(33,150,243,.7)','rgba(245,158,11,.7)'],
+        borderColor: ['#00B4D8','#2196F3','#F59E0B'],
+        borderWidth: 2, borderRadius: 6
+      }]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:true,
+      plugins: { legend:{display:false}, tooltip:{ callbacks:{ label: ctx=>' $'+ctx.raw.toLocaleString() } } },
+      scales: {
+        y: { ticks:{ callback: v=>'$'+v/1000+'K', font:{size:11} }, grid:{color:'rgba(0,0,0,.05)'} },
+        x: { grid:{display:false}, ticks:{font:{size:12}} }
+      }
+    }
+  });
+
+  // ROI chart
+  new Chart(document.getElementById('roiChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Năm 1 (MVP)','Năm 2 (GTM)','Năm 3 (Bão hòa)'],
+      datasets: [
+        { label: 'Doanh thu (USD)', data: [700000,7500000,23000000], backgroundColor: 'rgba(0,180,216,.65)', borderColor:'#00B4D8', borderWidth:2, borderRadius:6, order:2 },
+        { label: 'Chi phí vận hành (USD)', data: [2500000,3000000,4000000], backgroundColor: 'rgba(239,68,68,.45)', borderColor:'#EF4444', borderWidth:2, borderRadius:6, order:2 },
+        { label: 'Net Revenue', data: [-1800000,4500000,19000000], type:'line', borderColor:'#10B981', borderWidth:3, pointRadius:6, pointBackgroundColor:'#10B981', fill:false, tension:.3, order:1, yAxisID:'y1' }
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:true,
+      plugins: { legend:{ position:'top', labels:{font:{size:11},padding:12,boxWidth:12} } },
+      scales: {
+        y: { ticks:{ callback: v=>'$'+(v/1000000).toFixed(1)+'M', font:{size:11} }, grid:{color:'rgba(0,0,0,.05)'} },
+        y1: { position:'right', ticks:{ callback: v=>'$'+(v/1000000).toFixed(1)+'M', font:{size:11} }, grid:{display:false} },
+        x: { grid:{display:false}, ticks:{font:{size:12}} }
+      }
+    }
+  });
+
+  // Risk heatmap (bubble chart as substitute)
+  new Chart(document.getElementById('riskChart'), {
+    type: 'bubble',
+    data: {
+      datasets: [
+        { label:'TPS Fabric', data:[{x:1,y:3,r:12}], backgroundColor:'rgba(245,158,11,.6)', borderColor:'#F59E0B', borderWidth:2 },
+        { label:'Pháp lý NHNN', data:[{x:2,y:3,r:18}], backgroundColor:'rgba(239,68,68,.6)', borderColor:'#EF4444', borderWidth:2 },
+        { label:'Bảo mật', data:[{x:2,y:4,r:22}], backgroundColor:'rgba(185,28,28,.7)', borderColor:'#B91C1C', borderWidth:2 },
+        { label:'Nhân sự', data:[{x:3,y:2,r:18}], backgroundColor:'rgba(239,68,68,.6)', borderColor:'#EF4444', borderWidth:2 },
+        { label:'Tích hợp NH', data:[{x:2,y:3,r:18}], backgroundColor:'rgba(245,158,11,.6)', borderColor:'#F59E0B', borderWidth:2 },
+        { label:'User Adoption', data:[{x:2,y:2,r:14}], backgroundColor:'rgba(245,158,11,.5)', borderColor:'#F59E0B', borderWidth:2 },
+        { label:'Downtime', data:[{x:1,y:3,r:12}], backgroundColor:'rgba(16,185,129,.6)', borderColor:'#10B981', borderWidth:2 },
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:true,
+      plugins: { legend:{ position:'right', labels:{font:{size:10},padding:8,boxWidth:10} } },
+      scales: {
+        x: { min:0, max:4, title:{display:true,text:'Xác suất →',font:{size:11}}, ticks:{callback:v=>['','Thấp','TB','Cao',''][v],font:{size:11}}, grid:{color:'rgba(0,0,0,.05)'} },
+        y: { min:0, max:5, title:{display:true,text:'Mức độ ảnh hưởng →',font:{size:11}}, ticks:{callback:v=>['','TB','Cao','','Rất cao',''][v]||'',font:{size:11}}, grid:{color:'rgba(0,0,0,.05)'} }
+      }
+    }
+  });
+
+  // Gantt rows
+  const ganttRows = [
+    { label:'M1: Hạ tầng', start:1, len:1, color:'rgba(0,180,216,.7)' },
+    { label:'M2: Prototype', start:2, len:1, color:'rgba(0,180,216,.7)' },
+    { label:'M3: Pilot/G-N-G', start:3, len:1, color:'rgba(0,150,199,.7)' },
+    { label:'M4: Payment', start:4, len:2, color:'rgba(33,150,243,.7)' },
+    { label:'M5: Loyalty', start:6, len:2, color:'rgba(33,150,243,.7)' },
+    { label:'M6: Lending', start:8, len:1, color:'rgba(33,150,243,.7)' },
+    { label:'M7: Pilot & UAT', start:9, len:4, color:'rgba(21,101,192,.7)' },
+    { label:'M8: Nat. Rollout', start:13, len:4, color:'rgba(245,158,11,.7)' },
+    { label:'M9: Multi-industry', start:17, len:4, color:'rgba(245,158,11,.7)' },
+    { label:'M10: Hardening', start:21, len:2, color:'rgba(217,119,6,.7)' },
+    { label:'M11: Phase 2 Prep', start:23, len:2, color:'rgba(180,83,9,.7)' },
+  ];
+  const container = document.getElementById('gantt-rows');
+  ganttRows.forEach(r => {
+    const row = document.createElement('div');
+    row.style.cssText = 'display:grid;grid-template-columns:160px repeat(24,1fr);gap:2px;margin-bottom:3px;align-items:center;';
+    const lbl = document.createElement('div');
+    lbl.className = 'gantt-label';
+    lbl.textContent = r.label;
+    row.appendChild(lbl);
+    for (let i = 1; i <= 24; i++) {
+      const cell = document.createElement('div');
+      cell.style.cssText = 'height:18px;border-radius:3px;';
+      if (i >= r.start && i < r.start + r.len) {
+        cell.style.background = r.color;
+        if (i === r.start) { cell.style.borderRadius = '3px 0 0 3px'; }
+        if (i === r.start + r.len - 1) { cell.style.borderRadius = (r.len === 1) ? '3px' : '0 3px 3px 0'; }
+      }
+      row.appendChild(cell);
+    }
+    container.appendChild(row);
+  });
+
+  // Nav active link
+  const sections = document.querySelectorAll('[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let cur = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 80) cur = s.id; });
+    navLinks.forEach(a => {
+      const href = a.getAttribute('href').replace('#','');
+      a.style.color = href === cur ? 'var(--cyan)' : '';
+      a.style.background = href === cur ? 'rgba(0,180,216,.1)' : '';
+    });
+  });
+});
+</script>
+</body>
+</html>
